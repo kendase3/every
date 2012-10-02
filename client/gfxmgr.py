@@ -74,7 +74,7 @@ class GfxMgr:
 					self.shift = True
 				elif self.keyIsEventable(event.key):
 					# then we make a new input stevent and add it to the queue 
-					print "found eventable keypress"
+					#print "found eventable keypress"
 					actualKey = self.shiftify(event.key)
 					newStevent = Stevent(Stevent.KEYDOWN, actualKey)
 					self.outgoing.append(newStevent)

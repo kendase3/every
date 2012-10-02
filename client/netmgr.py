@@ -84,11 +84,11 @@ class IngressClient(basic.LineReceiver):
 	def lineReceived(self, line):
 		# we assume it is a screen update 
 		#	and pass it up to netMgr 
-		print "USING LINE MODE!"
+		#print "USING LINE MODE!"
 		self.netMgr.receiveScreen(line)
 	
 	def rawDataReceived(self, data):
-		print "USING RAW MODE!"
+		#print "USING RAW MODE!"
 		self.netMgr.receiveScreen(data) 
 
 	def sendMessage(self, line):

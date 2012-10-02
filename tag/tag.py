@@ -102,7 +102,8 @@ class Board(Game):
 		if self.board[newY][newX].player != None:
 			# then we dismiss the move
 			targetPlayer = self.board[newY][newX].player
-			print "collided with player %d" % targetPlayer.number 
+			print "player %d collided with player %d" % (
+					player, targetPlayer.number)  
 			if player.isIt:
 				targetPlayer.isIt = True
 				targetPlayer.color = AsciiPixel.RED

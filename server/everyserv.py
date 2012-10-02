@@ -56,10 +56,9 @@ class IngressProtocol(basic.LineReceiver):
 			the only thing we send are screens.
 		"""
 		# just assume it's a screen
-		print "ABOUT TO PACKETIZE"
 		ret = byte(screen) 
-		print "DID PACKETIZE"
 		"""
+		# use instanceof(), dude
 		if type(struct) == Screen:
 			print "this fires, dude"
 			ret = str(struct)
@@ -71,9 +70,7 @@ class IngressProtocol(basic.LineReceiver):
 		return ret	
 
 	def depacketize(self, string):
-		print "ABOUT TO DEPACKETIZE"	
 		ret = pickle.loads(string)
-		print "DID DEPACKETIZE"
 		return ret
 		
 	def lineReceived(self, line):
