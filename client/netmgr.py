@@ -38,14 +38,14 @@ class NetMgr:
 		#FIXME: so are we sending strings?  or actual objects these days?
 		# interesting complexity: am i always sending a list?  or sometimes just one event?
 		outgoingEvents = pickle.dumps(outgoing)		
-		print "sending..." + repr(outgoing)
+		#print "sending..." + repr(outgoing)
 		self.client.sendMessage(outgoingEvents) 
 
 	def receiveScreen(self, screenString):
 		"""
 			the server has sent us an updated screen object
 		"""
-		print "RECEIVESCREEN HAPPENED!"
+		#print "RECEIVESCREEN HAPPENED!"
 		self.screen = screen.destr(screenString)
 
 	def popScreen(self):
@@ -80,7 +80,7 @@ class IngressClient(basic.LineReceiver):
 	def lineReceived(self, line):
 		# we assume it is a screen update 
 		#	and pass it up to netMgr 
-		print "WE CAUGHT A SCREEN!"
+		#print "WE CAUGHT A SCREEN!"
 		self.netMgr.receiveScreen(line)
 
 	def sendMessage(self, line):

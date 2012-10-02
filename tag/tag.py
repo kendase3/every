@@ -52,6 +52,21 @@ class Board(Game):
 				playerColor, it, targetX, targetY) 	
 		targetCell.player = newPlayer
 		self.players.append(newPlayer) 
+	
+	def removePlayer(self, playerNumber):
+		#FIXME: the problem with playerNumbes discovered!  
+		# removing a player is expensive!	
+		targetPlayer = self.players[playerNumber]
+		targetCell = self.board[targetPlayer.y][targetPlayer.x]
+		targetCell.player = None
+		if targetPlayer.isIt:
+			#TODO: do-while
+			newIt = random.randInt(0, len(self.players))
+			while self.players[newIt] == None:
+				newIt = random.randInt(0, len(self.players))
+			self.players[newIt].isIt = True
+		self.players[playerNumber] = None
+		return 
 
 	def getPlayer(index):
 		return self.players[playerNumber]

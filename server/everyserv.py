@@ -106,6 +106,7 @@ class IngressFactory(protocol.ServerFactory):
 		GameType = getGame()
 		self.board = GameType()
 		self.numPlayers = 0;
+
 	def getUsers(self):
 		return userList 
 
@@ -113,6 +114,7 @@ class IngressFactory(protocol.ServerFactory):
 		IngressFactory.userList.append(user)
 
 	def removeUser(self, user):
+		self.board.removePlayer(user.playerNum)
 		IngressFactory.userList.remove(user)
 
 reactor.listenTCP(PORT, IngressFactory())
