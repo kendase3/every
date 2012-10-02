@@ -56,7 +56,9 @@ class IngressProtocol(basic.LineReceiver):
 			the only thing we send are screens.
 		"""
 		# just assume it's a screen
+		print "ABOUT TO"
 		ret = byte(screen) 
+		print "DID"
 		"""
 		if type(struct) == Screen:
 			print "this fires, dude"

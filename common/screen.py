@@ -124,7 +124,7 @@ def unbyte(screenBytes):
 	#print msg[0]
 	#print "len:%d" % len(str(msg[0]))
 	height, width = struct.unpack("BB", str(msg[:2])) 
-	print "height: %d, width %d" % (height, width)
+	print "HEY STEVE height: %d, width %d" % (height, width)
 	for i in range(0, height):
 		# height and width are counting in ASCII PIXELS not bytes
 		for j in range(0, width):

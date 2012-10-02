@@ -47,7 +47,9 @@ class NetMgr:
 		"""
 		#print "RECEIVESCREEN HAPPENED!"
 		# we remove \r\n
-		self.screen = screen.unbyte(screenBytes[:-2]) 
+		#self.screen = screen.unbyte(screenBytes[:-2]) 
+		# nah
+		self.screen = screen.unbyte(screenBytes) 
 
 	def popScreen(self):
 		"""
