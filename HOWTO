@@ -1,0 +1,1 @@
+If you'd like to use this to make your own ASCII games multiplayer (as I would certainly hope!), simply ensure your game supplies the methods included in game.py (an abstract base class) then edit binder.py to include the path to your game and import your game object.   
