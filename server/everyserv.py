@@ -56,9 +56,9 @@ class IngressProtocol(basic.LineReceiver):
 			the only thing we send are screens.
 		"""
 		# just assume it's a screen
-		print "ABOUT TO"
+		print "ABOUT TO PACKETIZE"
 		ret = byte(screen) 
-		print "DID"
+		print "DID PACKETIZE"
 		"""
 		if type(struct) == Screen:
 			print "this fires, dude"
@@ -71,7 +71,9 @@ class IngressProtocol(basic.LineReceiver):
 		return ret	
 
 	def depacketize(self, string):
+		print "ABOUT TO DEPACKETIZE"	
 		ret = pickle.loads(string)
+		print "DID DEPACKETIZE"
 		return ret
 		
 	def lineReceived(self, line):
@@ -94,7 +96,7 @@ class IngressProtocol(basic.LineReceiver):
 		screen = self.factory.board.getScreen(self.playerNum)  
 		transmission = self.packetize(screen)
 		#print "sending this screen update...\n%s" % transmission 
-		self.transport.write(transmission + LINE_ENDING) 
+		self.transport.write(str(transmission) + LINE_ENDING) 
 		#print "sent."
 
 	def handleQuit(self):
