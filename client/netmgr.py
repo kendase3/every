@@ -15,6 +15,9 @@ class NetMgr:
 	HOST = "localhost"
 	PORT = 50025
 	LINE_ENDING = "\r\n"
+	#TODO: should eventually prompt for host and port 
+	# and remember a list of previously used hosts and ports
+	# (or at least the last one) 
 
 	def __init__(self):
 		reactor.connectTCP(NetMgr.HOST, NetMgr.PORT, IngressClientFactory(self))
