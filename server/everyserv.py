@@ -17,7 +17,7 @@ sys.path.insert(0, os.path.join(".."))
 
 # local
 from stevent import Stevent
-from screen import Screen 
+from screen import Screen, byte, unbyte 
 #from player import Player
 from asciipixel import AsciiPixel
 
@@ -49,14 +49,14 @@ class IngressProtocol(basic.LineReceiver):
 		screen = self.factory.board.getScreen(self.playerNum)  
 		transmission = self.packetize(screen)
 		#print "sending this screen update...\n%s" % transmission 
-		self.transport.write(transmission + LINE_ENDING) 
+		self.transport.write(str(transmission) + LINE_ENDING)
 
-	def packetize(self, struct):
+	def packetize(self, screen):
 		"""
-			screens require custom optimization
+			the only thing we send are screens.
 		"""
 		# just assume it's a screen
-		ret = str(struct)
+		ret = byte(screen) 
 		"""
 		if type(struct) == Screen:
 			print "this fires, dude"

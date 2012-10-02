@@ -32,6 +32,8 @@ def readScreen():
 	msg = bytearray()
 	msg.extend(fil.read()) 	
 	fil.close() 
+	print "msg|%s|end" % str(msg)
+	print "msg len: %d"  % len(str(msg))
 	width = 0
 	height = 0
 	asciiPixels = [] 	

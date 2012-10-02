@@ -41,12 +41,13 @@ class NetMgr:
 		#print "sending..." + repr(outgoing)
 		self.client.sendMessage(outgoingEvents) 
 
-	def receiveScreen(self, screenString):
+	def receiveScreen(self, screenBytes):
 		"""
 			the server has sent us an updated screen object
 		"""
 		#print "RECEIVESCREEN HAPPENED!"
-		self.screen = screen.destr(screenString)
+		# we remove \r\n
+		self.screen = screen.unbyte(screenBytes[:-2]) 
 
 	def popScreen(self):
 		"""
@@ -76,12 +77,17 @@ class NetMgr:
 class IngressClient(basic.LineReceiver):
 	def __init__(self, netMgr):
 		self.netMgr = netMgr 
+		#self.setRawMode() # now accepts raw data
 
 	def lineReceived(self, line):
 		# we assume it is a screen update 
 		#	and pass it up to netMgr 
-		#print "WE CAUGHT A SCREEN!"
+		print "USING LINE MODE!"
 		self.netMgr.receiveScreen(line)
+	
+	def rawDataReceived(self, data):
+		print "USING RAW MODE!"
+		self.netMgr.receiveScreen(data) 
 
 	def sendMessage(self, line):
 		# send out the message

@@ -1,5 +1,7 @@
 #! /usr/bin/env python
 
+import struct 
+
 from asciipixel import AsciiPixel 
 
 class Screen:
@@ -102,6 +104,39 @@ def destr(screenString):
 
 	ret = Screen(rowList) 
 	return ret
+
+def byte(screen):
+	msg = bytearray() 
+	msg.extend(struct.pack("BB", screen.height, screen.width))  
+	for row in screen.screen:
+		for asciipixel in row:
+			msg.extend(struct.pack(
+					"BB", asciipixel.ascii, asciipixel.color)) 
+	return msg
+
+def unbyte(screenBytes): 
+	msg = bytearray()
+	msg.extend(screenBytes) 
+	width = 0
+	height = 0
+	asciiPixels = []
+	curRow = [] 
+	#print msg[0]
+	#print "len:%d" % len(str(msg[0]))
+	height, width = struct.unpack("BB", str(msg[:2])) 
+	print "height: %d, width %d" % (height, width)
+	for i in range(0, height):
+		# height and width are counting in ASCII PIXELS not bytes
+		for j in range(0, width):
+			curPos = 2 * (i * width + j) + 2 # 2=size of header 
+			symbol, color = struct.unpack("BB", 
+					str(msg[curPos:(curPos + 2)])) 
+			asciiPixel = AsciiPixel(symbol, color) 
+			curRow.append(asciiPixel)
+		asciiPixels.append(curRow)
+		curRow = [] 
+	screen = Screen(asciiPixels) 
+	return screen
 
 if __name__=="__main__":
 	#unit test
