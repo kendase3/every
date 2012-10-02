@@ -97,7 +97,9 @@ class IngressProtocol(basic.LineReceiver):
 
 	def handleQuit(self):
 		self.factory.removeUser(self)
-		self.transport.loseConnection()
+		#self.transport.loseConnection()
+		# abort causes immediate disconnect
+		self.transport.abortConnection()
 
 class IngressFactory(protocol.ServerFactory):
 	protocol = IngressProtocol

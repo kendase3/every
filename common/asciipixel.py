@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 class AsciiPixel:
-	DUMMY = 256
+	DUMMY = 255
 	DEFAULT_ASCII = DUMMY 
 	DEFAULT_RED = 255
 	DEFAULT_GREEN = 255
