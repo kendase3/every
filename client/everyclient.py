@@ -41,6 +41,7 @@ class SessionBuddy():
 		self.gfxMgr.iterate() 
 		if self.gfxMgr.hasEvents():
 			self.netMgr.sendEvents(self.gfxMgr.popEvents())
+			self.netMgr.iterate()
 		self.cleanup()
 	
 	def cleanup(self):

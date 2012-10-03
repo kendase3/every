@@ -17,6 +17,7 @@ sys.path.insert(0, os.path.join(".."))
 
 # local
 import stevent
+from stevent import Stevent
 import screen
 #from player import Player
 from asciipixel import AsciiPixel
@@ -88,6 +89,10 @@ class IngressProtocol(basic.LineReceiver):
 
 		self.factory.board.handleInput(stevent, self.playerNum)
 		print "handling input for player %d" % self.playerNum
+		# then it's up to us to also check for quit, game shouldn't have to call us
+		if stevent.type == Stevent.QUIT:
+			print "The server noticed it was quitting time!"
+			self.handleQuit() 
 		screen = self.factory.board.getScreen(self.playerNum)  
 		transmission = self.packetize(screen)
 		#print "sending this screen update...\n%s" % transmission 

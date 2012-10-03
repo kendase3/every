@@ -62,12 +62,14 @@ class GfxMgr:
 	def checkInput(self): 
 		for event in pygame.event.get():
 			#print "processing event: %s" % str(event)
-			if event.type == QUIT:
+			if event.type == Stevent.QUIT:
 				# we need to tell the server that this user quit
+				print "gfxmgr noticed it was quitting time!" 
 				newStevent = Stevent(Stevent.QUIT) 
 				self.outgoing.append(newStevent) 
 				self.quit = True
-			elif event.type == KEYDOWN: 
+			elif event.type == Stevent.KEYDOWN: 
+				print "noticed keydown event"
 				if self.keyIsQuit(event.key): 
 					# quit is basically the only thing handled locally
 					# 	at least until this novelty fails
@@ -82,7 +84,8 @@ class GfxMgr:
 					newStevent = Stevent(Stevent.KEYDOWN, actualKey)
 					self.outgoing.append(newStevent)
 					#print repr(self.outgoing)
-			elif event.type == KEYUP:
+			elif event.type == Stevent.KEYUP:
+				print "noticed keyup event"
 				if self.keyIsShift(event.key):
 					self.shift = False
 

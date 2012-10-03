@@ -75,6 +75,7 @@ class NetMgr:
 			return True
 
 	def cleanup(self):
+		print "netmgr is cleaning up!"
 		reactor.stop()
 		# allow the stop to actually be processed
 		reactor.iterate()

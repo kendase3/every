@@ -37,6 +37,8 @@ def byte(stevent):
 	"""
 		turn a stevent into a two-byte representation
 	"""
+	print "packing this:"
+	print str(stevent)
 	msg = bytearray()
 	msg.extend(struct.pack("BB", stevent.type, stevent.key)) 
 	return msg

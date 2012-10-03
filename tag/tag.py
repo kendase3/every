@@ -75,6 +75,7 @@ class Board(Game):
 
 	def handleInput(self, stevent, playerIndex):
 		if stevent.type == Stevent.QUIT:
+			print "The game noticed it was quitting time!" 
 			self.removePlayer(playerIndex) 
 		if stevent.type != Stevent.KEYDOWN:
 			return
