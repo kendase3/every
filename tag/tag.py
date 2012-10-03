@@ -100,6 +100,9 @@ class Board(Game):
 			# then we move up
 			xOffset = 0
 			yOffset = -1
+		else:
+			# any other input is invalid
+			return
 		player = self.players[playerIndex]
 		newX = (player.x + xOffset) % Board.WIDTH 
 		newY = (player.y + yOffset) % Board.HEIGHT 

@@ -35,12 +35,12 @@ class SessionBuddy():
 			if self.gfxMgr.hasEvents():
 				self.netMgr.sendEvents(self.gfxMgr.popEvents())
 			if self.netMgr.hasScreen():
-				#print 'NETMGR has a screen!'
 				self.gfxMgr.updateScreen(self.netMgr.popScreen())
-			"""
-			else:
-				print 'netMgr had no screen'
-			"""
+		#FIXME: when gfxMgr quits, netMgr never hears about the disconnect from the client! 
+		# we pump through the remaining events from gfxMgr
+		self.gfxMgr.iterate() 
+		if self.gfxMgr.hasEvents():
+			self.netMgr.sendEvents(self.gfxMgr.popEvents())
 		self.cleanup()
 	
 	def cleanup(self):
