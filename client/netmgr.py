@@ -40,6 +40,8 @@ class NetMgr:
 		# interesting complexity: am i always sending a list?  or sometimes just one event?
 		#outgoingEvents = pickle.dumps(outgoing)		
 		for event in outgoing:	
+			if event.type == stevent.Stevent.QUIT:
+				print "actually sending the quit event!"
 			outBytes = stevent.byte(event)  
 			self.client.sendMessage(str(outBytes)) 
 		#print "sending..." + repr(outgoing)

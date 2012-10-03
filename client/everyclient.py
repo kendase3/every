@@ -12,6 +12,8 @@ sys.path.insert(0, os.path.join("..", "common"))
 from gfxmgr import GfxMgr 
 from netmgr import NetMgr
 
+LAST_HURRAH_LENGTH = 5 # how many times should we pump the network after quit?
+
 class SessionBuddy():
 	"""
 		session buddy does everything.
@@ -41,7 +43,8 @@ class SessionBuddy():
 		self.gfxMgr.iterate() 
 		if self.gfxMgr.hasEvents():
 			self.netMgr.sendEvents(self.gfxMgr.popEvents())
-			self.netMgr.iterate()
+			for i in range(0, LAST_HURRAH_LENGTH):
+				self.netMgr.iterate()
 		self.cleanup()
 	
 	def cleanup(self):
