@@ -5,6 +5,7 @@ from twisted.internet.protocol import Protocol, ReconnectingClientFactory
 import pickle
 
 import screen
+import stevent
 
 class NetMgr:
 	"""
@@ -37,9 +38,11 @@ class NetMgr:
 		# otherwise, we'll need to pack up the messages and send them
 		#FIXME: so are we sending strings?  or actual objects these days?
 		# interesting complexity: am i always sending a list?  or sometimes just one event?
-		outgoingEvents = pickle.dumps(outgoing)		
+		#outgoingEvents = pickle.dumps(outgoing)		
+		for event in outgoing:	
+			outBytes = stevent.byte(event)  
+			self.client.sendMessage(str(outBytes)) 
 		#print "sending..." + repr(outgoing)
-		self.client.sendMessage(outgoingEvents) 
 
 	def receiveScreen(self, screenBytes):
 		"""
@@ -93,6 +96,8 @@ class IngressClient(basic.LineReceiver):
 
 	def sendMessage(self, line):
 		# send out the message
+		#print "sending|%s|" % (line + NetMgr.LINE_ENDING)
+		#print "\nlen=%d" % len(line + NetMgr.LINE_ENDING)
 		self.transport.write(line + NetMgr.LINE_ENDING)
 
 class IngressClientFactory(ReconnectingClientFactory):

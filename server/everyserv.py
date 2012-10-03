@@ -16,8 +16,8 @@ sys.path.insert(0, os.path.join("..", "game"))
 sys.path.insert(0, os.path.join(".."))
 
 # local
-from stevent import Stevent
-from screen import Screen, byte, unbyte 
+import stevent
+import screen
 #from player import Player
 from asciipixel import AsciiPixel
 
@@ -51,12 +51,12 @@ class IngressProtocol(basic.LineReceiver):
 		#print "sending this screen update...\n%s" % transmission 
 		self.transport.write(str(transmission) + LINE_ENDING)
 
-	def packetize(self, screen):
+	def packetize(self, curScreen):
 		"""
 			the only thing we send are screens.
 		"""
 		# just assume it's a screen
-		ret = byte(screen) 
+		ret = screen.byte(curScreen) 
 		"""
 		# use instanceof(), dude
 		if type(struct) == Screen:
@@ -70,7 +70,7 @@ class IngressProtocol(basic.LineReceiver):
 		return ret	
 
 	def depacketize(self, string):
-		ret = pickle.loads(string)
+		ret = stevent.unbyte(string)
 		return ret
 		
 	def lineReceived(self, line):
@@ -83,13 +83,11 @@ class IngressProtocol(basic.LineReceiver):
 			for now i guess we are the game
 		"""
 		print "lineReceived fired!"
-		stevents = self.depacketize(line) 		
-		# for now, let's just print them upon receive
-		print str(stevents) 	
+		# we assume a single stevent is steve-sent
+		stevent = self.depacketize(line) 		
 
-		for stevent in stevents:
-			self.factory.board.handleInput(stevent, self.playerNum)
-			print "handling input for player %d" % self.playerNum
+		self.factory.board.handleInput(stevent, self.playerNum)
+		print "handling input for player %d" % self.playerNum
 		screen = self.factory.board.getScreen(self.playerNum)  
 		transmission = self.packetize(screen)
 		#print "sending this screen update...\n%s" % transmission 

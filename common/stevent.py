@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 
-#TODO: does it matter how big these are?  
-# i think they're way smaller than a screen dump 
+import struct
+
 class Stevent:
 	"""
 		like an event but more handsome
@@ -32,6 +32,21 @@ class Stevent:
 
 	def __str__(self):
 		return repr(self)	
+
+def byte(stevent):
+	"""
+		turn a stevent into a two-byte representation
+	"""
+	msg = bytearray()
+	msg.extend(struct.pack("BB", stevent.type, stevent.key)) 
+	return msg
+
+def unbyte(steventBytes):		
+	msg = bytearray()
+	type, key = struct.unpack("BB", steventBytes) 	
+	print "type=%d, key=%d" % (type, key) 
+	stevent = Stevent(type, key)
+	return stevent
 
 if __name__=="__main__":
 	# unit test

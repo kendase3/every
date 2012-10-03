@@ -8,11 +8,30 @@
 import os
 import sys
 import struct 
+import pickle
 sys.path.insert(0, os.path.join("..", "common")) 
 
 # local 
 from asciipixel import AsciiPixel 
 from screen import Screen 
+from stevent import Stevent
+
+def writeStevent():
+	stevent = Stevent(Stevent.KEYDOWN, ord('a'))
+	print str(pickle.dumps(stevent))
+	fil = open("out3.bin", "wb")
+	msg = bytearray()
+	msg.extend(struct.pack("BB", stevent.type, stevent.key)) 
+	fil.write(msg)
+	fil.close() 
+
+def readStevent():
+	fil = open("out3.bin", "rb") 	 
+	msg = bytearray()
+	msg.extend(fil.read())
+	fil.close()
+	type, key = struct.unpack("BB", str(msg[:2])) 	
+	print "type=%d, key=%d" % (type, key) 
 
 def writeScreen():
 	screen = Screen()
@@ -55,10 +74,5 @@ def readScreen():
 	screen = Screen(asciiPixels) 
 	return screen
 
-print "read screen:"
-read = readScreen()
-print str(read) 
-print "actual:"
-otherScreen = Screen()
-print str(otherScreen)
-
+#writeStevent() 
+readStevent() 
