@@ -63,6 +63,9 @@ class GfxMgr:
 		for event in pygame.event.get():
 			#print "processing event: %s" % str(event)
 			if event.type == QUIT:
+				# we need to tell the server that this user quit
+				newStevent = Stevent(Stevent.QUIT) 
+				self.outgoing.append(newStevent) 
 				self.quit = True
 			elif event.type == KEYDOWN: 
 				if self.keyIsQuit(event.key): 

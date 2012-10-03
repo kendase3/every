@@ -74,6 +74,8 @@ class Board(Game):
 		return self.players[playerNumber]
 
 	def handleInput(self, stevent, playerIndex):
+		if stevent.type == Stevent.QUIT:
+			self.removePlayer(playerIndex) 
 		if stevent.type != Stevent.KEYDOWN:
 			return
 		"""

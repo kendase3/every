@@ -13,9 +13,6 @@ class Game:
 	def addPlayer(self, playerNumber):
 		return 
 	@abc.abstractmethod
-	def removePlayer(self, playerNumber):
-		return
-	@abc.abstractmethod
 	def handleInput(self, stevent, playerIndex):
 		return
 	@abc.abstractmethod
