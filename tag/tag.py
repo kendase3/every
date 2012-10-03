@@ -56,15 +56,17 @@ class Board(Game):
 	def removePlayer(self, playerNumber):
 		#FIXME: the problem with playerNumbes discovered!  
 		# removing a player is expensive!	
+		print "removePlayer fired!"
 		targetPlayer = self.players[playerNumber]
 		targetCell = self.board[targetPlayer.y][targetPlayer.x]
 		targetCell.player = None
 		if targetPlayer.isIt:
+			while True:
 			#TODO: do-while
-			newIt = random.randInt(0, len(self.players))
-			while self.players[newIt] == None:
 				newIt = random.randInt(0, len(self.players))
-			self.players[newIt].isIt = True
+				if self.players[newIt] != None:
+					self.players[newIt].isIt = True
+					break	
 		self.players[playerNumber] = None
 		return 
 
