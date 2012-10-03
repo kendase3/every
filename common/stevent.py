@@ -11,7 +11,7 @@ class Stevent:
 	KEYUP = 1
 	QUIT = 2
 
-	def __init__(self, eventType, key=None): 
+	def __init__(self, eventType, key=0): 
 		"""
 			key is the number i.e. ord('a') not 'a'
 		"""

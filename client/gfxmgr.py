@@ -59,21 +59,25 @@ class GfxMgr:
 		winHeight = GfxMgr.FONT_SIZE * numLines  
 		self.screen = pygame.display.set_mode((winWidth, winHeight))
 
+	def doQuit(self): 
+		print "gfxmgr noticed it was quitting time!"
+		newStevent = Stevent(Stevent.QUIT)
+		self.outgoing.append(newStevent)
+		self.quit = True
+
 	def checkInput(self): 
 		for event in pygame.event.get():
 			#print "processing event: %s" % str(event)
-			if event.type == Stevent.QUIT:
+			# FIXME: AHA, it's not Stevent.Quit
+			if event.type == QUIT:
 				# we need to tell the server that this user quit
-				print "gfxmgr noticed it was quitting time!" 
-				newStevent = Stevent(Stevent.QUIT) 
-				self.outgoing.append(newStevent) 
-				self.quit = True
-			elif event.type == Stevent.KEYDOWN: 
+				self.doQuit()
+			elif event.type == KEYDOWN: 
 				print "noticed keydown event"
 				if self.keyIsQuit(event.key): 
 					# quit is basically the only thing handled locally
 					# 	at least until this novelty fails
-					self.quit = True
+					self.doQuit()
 				if self.keyIsShift(event.key):
 					#TODO: modify the keys typed
 					self.shift = True
@@ -84,7 +88,7 @@ class GfxMgr:
 					newStevent = Stevent(Stevent.KEYDOWN, actualKey)
 					self.outgoing.append(newStevent)
 					#print repr(self.outgoing)
-			elif event.type == Stevent.KEYUP:
+			elif event.type == KEYUP:
 				print "noticed keyup event"
 				if self.keyIsShift(event.key):
 					self.shift = False
