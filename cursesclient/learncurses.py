@@ -1,9 +1,57 @@
 #! /usr/bin/env python
+import os, sys
 import curses
 from curses import wrapper # handles the wonk automatically and enables colors 
 from curses import ascii # maybe? 
 
-#TODO: learn how to capture input, print colored cells, that's it!
+sys.path.insert(0, os.path.join("..", "common")) 
+sys.path.insert(0, os.path.join("..")) 
+from igfx import IGfxMgr
+from stevent import Stevent
+from screen import Screen
+from asciipixel import AsciiPixel
+
+class CursesGfxMgr(IGfxMgr):
+	def __init__(self): 
+		IGfxMgr.__init__(self) 	
+	
+	def updateWindowDimensions(self, numChars, numLines):
+		IGfxMgr.updateWindowDimensions(self, numChars, numLines)
+
+	def doQuit(self):
+		IGfxMgr.doQuit(self)
+
+	def checkInput(self):
+		#TODO
+		return
+	
+	def clearScreen(self):
+		#TODO
+		return
+
+	def blitNetScreen(self):
+		#TODO
+		return
+
+	def blitDefaultScreen(self):
+		#TODO
+		return
+
+	def iterate(self):
+		#TODO
+		return
+
+	def hasEvents(self):
+		#TODO
+		return
+
+	def popEvents(self):
+		#TODO
+		return
+
+	def cleanup(self):
+		#TODO
+		return
 
 def respondToInput(screen):
 	problem = False
@@ -46,4 +94,6 @@ def hello(screen):
 	while respondToInput(screen):
 		screen.refresh()
 
-wrapper(hello)
+#wrapper(hello)
+cur = CursesGfxMgr()
+print "%d" % cur.quit
