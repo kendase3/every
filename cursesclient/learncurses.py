@@ -7,6 +7,7 @@ from curses import ascii # maybe?
 
 def respondToInput(screen):
 	c = screen.getch() 
+	screen.clear()
 	if c == ord('y'):
 		screen.addstr(3, 0, "yussss", curses.color_pair(3))
 		return True
@@ -35,6 +36,6 @@ def hello(screen):
 	#	screen.addstr("y")
 	screen.refresh()
 	while respondToInput(screen):
-		pass 
+		screen.refresh()
 
 wrapper(hello)
