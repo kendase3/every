@@ -6,8 +6,15 @@ from curses import ascii # maybe?
 #TODO: learn how to capture input, print colored cells, that's it!
 
 def respondToInput(screen):
+	problem = False
 	c = screen.getch() 
+	if c == curses.ERR: 
+		problem = True
 	screen.clear()
+	if problem:
+		screen.addstr(4, 0, "exception!", curses.A_BOLD)
+	else:
+		screen.addstr(4, 0, "no exception!", curses.A_BOLD)
 	if c == ord('y'):
 		screen.addstr(3, 0, "yussss", curses.color_pair(3))
 		return True
@@ -22,6 +29,7 @@ def respondToInput(screen):
 	
 def hello(screen):
 	#screen.attron(curses.A_BOLD)
+	curses.halfdelay(5)
 	screen.addstr("h", curses.A_BOLD)
 	screen.addstr("e", curses.A_BOLD)
 	screen.addstr("l", curses.A_BOLD)
