@@ -7,6 +7,8 @@
 		for current thing being written
 """
 
+#TODO: rename pygamegfx.py
+
 import pygame
 from pygame.locals import *
 import sys, os
@@ -14,8 +16,6 @@ from stevent import Stevent
 from screen import Screen
 from asciipixel import AsciiPixel
 
-#TODO: should have another class called rawgfx that manages ascii cell values
-# ^ what?  why?!
 class GfxMgr:
 	WIGGLE_ROOM_WIDTH = 70 
 	WIGGLE_ROOM_HEIGHT = 100 
