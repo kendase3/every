@@ -11,6 +11,7 @@ sys.path.insert(0, os.path.join("..", "common"))
 # local imports
 from gfxmgr import GfxMgr 
 from netmgr import NetMgr
+from cursesgfxmgr import CursesGfxMgr
 
 #FIXME: note that this 'solution' has yet to do anything and will probably be removed
 LAST_HURRAH_LENGTH = 5 # how many times should we pump the network after quit?
@@ -26,13 +27,14 @@ class SessionBuddy():
 		self.gfxMgr = GfxMgr() 
 		self.netMgr = NetMgr() 
 		if self.netMgr.failed: 
-			self.gfxMgr.addIncomingMessage("Failed to connect to server.  Are you sure one is running at %s on port %d?" % (
-					NetMgr.HOST, NetMgr.PORT))
+			print "Failed to connect to server.  Are you sure one is running at %s on port %d?" % (
+					NetMgr.HOST, NetMgr.PORT)
 		self.quit = False
 
 	def run(self):
 		while not self.gfxMgr.quit and not self.netMgr.quit:
 			#TODO: 60 fps code here
+			# lawl good one steve
 			self.gfxMgr.iterate()
 			self.netMgr.iterate()
 			if self.gfxMgr.hasEvents():

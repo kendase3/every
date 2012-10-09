@@ -12,6 +12,11 @@ from screen import Screen
 from asciipixel import AsciiPixel
 
 class CursesGfxMgr(IGfxMgr):
+	RED_PAIR = 1
+	BLUE_PAIR = 2 
+	YELLOW_PAIR = 3
+	DUMMY_CHAR = '~'
+	DUMMY_COLOR = RED_PAIR
 	def __init__(self): 
 		IGfxMgr.__init__(self) 	
 		self.cursesScreen = curses.initscr()
@@ -21,6 +26,9 @@ class CursesGfxMgr(IGfxMgr):
 		# set custom tenths of a second to wait before giving up on waiting for input
 		curses.start_color() 
 		curses.halfdelay(5)
+		curses.init_pair(1, curses.COLOR_RED, curses.COLOR_BLACK) 
+		curses.init_pair(2, curses.COLOR_BLUE, curses.COLOR_BLACK) 
+		curses.init_pair(3, curses.COLOR_YELLOW, curses.COLOR_BLACK) 
 	
 	def updateWindowDimensions(self, numChars, numLines):
 		IGfxMgr.updateWindowDimensions(self, numChars, numLines)
@@ -78,6 +86,31 @@ class CursesGfxMgr(IGfxMgr):
 		if self.netScreen == None:
 			self.blitDefaultScreen()
 			return
+		if len(self.netScreen.screen) != self.numLines and (
+				len(self.netScreen.screen[0]) != self.numChars):
+			# then we require a window resize	
+			newNumLines = len(self.netScreen.screen)
+			newNumChars = len(self.netScreen.screen[0]) 
+			self.updateWindowDimensions(newNumChars, newNumLines) 
+		for i in range(0, self.netScreen.height):
+			for j in range(0, self.netScreen.width):
+				asciiPixel = self.netScreen.screen[i][j]
+				colorPair = 0
+				if asciiPixel.ascii == AsciiPixel.DUMMY:
+					asciiChar = CursesGfxMgr.DUMMY_CHAR
+					colorVal = CursesGfxMgr.DUMMY_COLOR
+				else:
+					asciiChar = chr(asciiPixel.ascii)
+					if asciiPixel.color == AsciiPixel.BLUE:
+						# then we set the color to blue
+						colorNum = CursesGfxMgr.BLUE
+					elif asciiPixel.color == AsciiPixel.RED:
+						# you get the idea
+						colorNum = CursesGfxMgr.RED
+					else:
+						# if it's unknown, we just assume white
+						colorNum = 0
+				screen.addstr(i, j, asciiChar, curses.color_pair(colorPair))
 		return
 
 	def blitDefaultScreen(self):
@@ -92,15 +125,10 @@ class CursesGfxMgr(IGfxMgr):
 
 	#TODO: both these two move into interface
 	def hasEvents(self):
-		if len(self.outgoing) > 0:
-			return True
-		else:
-			return False
+		return IGfxMgr.hasEvents(self)
 
 	def popEvents(self):
-		ret = self.outgoing[:]
-		self.outgoing = []
-		return ret
+		return IGfxMgr.popEvents(self)
 
 	def cleanup(self):
 		#TODO: redundant with doQuit?  refactor!

@@ -23,8 +23,8 @@ class Board(Game):
 	"""
 		a lil' world
 	"""
-	WIDTH = 30 
-	HEIGHT = 30 
+	WIDTH = 80 
+	HEIGHT = 25 
 	#WIDTH = 30
 	#HEIGHT = 30
 	def __init__(self):
