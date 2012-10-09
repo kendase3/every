@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 
 import struct 
+from itertools import izip
 
 from asciipixel import AsciiPixel 
 
@@ -69,6 +70,16 @@ class Screen:
 				rowStr += "|" # ascii-pixel separator 
 			ret += rowStr + '\n' 
 		return ret
+
+	"""
+	def __eq__(self, other): 
+		# what does it mean for two screens to be equal?
+		for selfRow, otherRow in izip(self.screen, other.screen):
+			for selfCell, otherCell in izip(selfRow, otherRow):
+				if selfCell != otherCell:	
+					return False
+		return True
+	"""
 	
 # note: not part of class
 def destr(screenString):

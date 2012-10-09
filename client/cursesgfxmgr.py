@@ -19,6 +19,7 @@ class CursesGfxMgr(IGfxMgr):
 	DUMMY_COLOR = RED_PAIR
 	def __init__(self): 
 		IGfxMgr.__init__(self) 	
+		self.screenChanged = True
 		self.numLines = 25
 		self.numChars = 80 	# assume a standard nethack screen to begin 
 							# (does not matter to curses)
@@ -28,7 +29,8 @@ class CursesGfxMgr(IGfxMgr):
 		self.cursesScreen.keypad(1)
 		# set custom tenths of a second to wait before giving up on waiting for input
 		curses.start_color() 
-		curses.halfdelay(5)
+		#curses.halfdelay(5)
+		self.cursesScreen.nodelay(1)
 		curses.init_pair(1, curses.COLOR_RED, curses.COLOR_BLACK) 
 		curses.init_pair(2, curses.COLOR_BLUE, curses.COLOR_BLACK) 
 		curses.init_pair(3, curses.COLOR_YELLOW, curses.COLOR_BLACK) 
@@ -37,6 +39,7 @@ class CursesGfxMgr(IGfxMgr):
 		IGfxMgr.updateWindowDimensions(self, numChars, numLines)
 
 	def updateScreen(self, netScreen):
+		self.screenChanged = True
 		IGfxMgr.updateScreen(self, netScreen)
 
 	def doQuit(self):
@@ -89,6 +92,8 @@ class CursesGfxMgr(IGfxMgr):
 		return
 
 	def blitNetScreen(self):
+		if self.screenChanged == False:
+			return
 		if self.netScreen == None:
 			self.blitDefaultScreen()
 			return
@@ -118,6 +123,7 @@ class CursesGfxMgr(IGfxMgr):
 						# if it's unknown, we just assume white
 						colorNum = 0
 				self.cursesScreen.addstr(i, j, asciiChar, curses.color_pair(colorPair))
+		self.screenChanged = False
 		return
 
 	def blitDefaultScreen(self):

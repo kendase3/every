@@ -35,6 +35,13 @@ class AsciiPixel:
 	def __str__(self):
 		return "%d,%d" % (self.ascii, self.color)
 
+	def __eq__(self, other):
+		if self.ascii == other.ascii and (
+				self.color == other.color):
+			return True
+		else:
+			return False	
+
 	def getRed(self):
 		# only consider white, black, red, green, blue
 		if self.color == AsciiPixel.WHITE or self.color == AsciiPixel.RED:
