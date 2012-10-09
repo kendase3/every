@@ -55,7 +55,7 @@ class CursesGfxMgr(IGfxMgr):
 			# then there has been no input
 			return
 		# otherwise, the user input something
-		if c == ord('q') or c == curses.ascii.ESC:
+		if c == curses.ascii.ESC:
 			self.doQuit()	
 		elif self.keyIsEventable(c):
 			newStevent = Stevent(Stevent.KEYDOWN, c)

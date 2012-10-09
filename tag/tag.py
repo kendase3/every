@@ -63,7 +63,6 @@ class Board(Game):
 		found = False
 		for i in range(0, len(self.players)):
 			if self.players[i].id == playerId:
-				print "FOUND THE PLAYER"
 				found = True
 				targetPlayer = self.players.pop(i) 
 				break	
@@ -86,30 +85,24 @@ class Board(Game):
 
 	def handleInput(self, stevent, playerId):
 		if stevent.type == Stevent.QUIT:
-			print "The game noticed it was quitting time for player %d!" % (
-					playerId) 
 			self.removePlayer(playerId) 
 		if stevent.type != Stevent.KEYDOWN:
 			return
-		"""
-		if len(self.players) == 0:
-			return
-		"""
-		print "stevent=%s" % str(stevent) 
+		#print "stevent=%s" % str(stevent) 
 		xOffset = yOffset = 0
-		if stevent.key == ord('a'):
+		if stevent.key == ord('a') or stevent.key == ord('h'):
 			# then we move left 
 			xOffset = -1
 			yOffset = 0
-		elif stevent.key == ord('d'):
+		elif stevent.key == ord('d') or stevent.key == ord('l'):
 			# then we move right
 			xOffset = 1
 			yOffset = 0
-		elif stevent.key == ord('s'):
+		elif stevent.key == ord('s') or stevent.key == ord('j'):
 			# then we move down
 			xOffset = 0
 			yOffset = 1
-		elif stevent.key == ord('w'):
+		elif stevent.key == ord('w') or stevent.key == ord('k'):
 			# then we move up
 			xOffset = 0
 			yOffset = -1

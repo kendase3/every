@@ -36,25 +36,15 @@ class NetMgr:
 		if self.client == None:
 			print "No client!  =0 "
 			return
-		# otherwise, we'll need to pack up the messages and send them
-		#FIXME: so are we sending strings?  or actual objects these days?
-		# interesting complexity: am i always sending a list?  or sometimes just one event?
-		#outgoingEvents = pickle.dumps(outgoing)		
+		#TODO: what if an event happens to match '\r\n'?  it could happen.
 		for event in outgoing:	
-			if event.type == stevent.Stevent.QUIT:
-				print "actually sending the quit event!"
 			outBytes = stevent.byte(event)  
 			self.client.sendMessage(str(outBytes)) 
-		#print "sending..." + repr(outgoing)
 
 	def receiveScreen(self, screenBytes):
 		"""
 			the server has sent us an updated screen object
 		"""
-		#print "RECEIVESCREEN HAPPENED!"
-		# we remove \r\n
-		#self.screen = screen.unbyte(screenBytes[:-2]) 
-		# nah
 		self.screen = screen.unbyte(screenBytes) 
 
 	def popScreen(self):
@@ -77,14 +67,10 @@ class NetMgr:
 			return True
 
 	def cleanup(self):
-		#TODO: we should terminate the connection here
 		if self.client != None:
-			#FIXME: Client object has no abortConnection
-			#self.client.transport.abortConnection() 		
 			self.client.transport.loseConnection() 		
+			#FIXME: should use deferreds and wait exact amount
 			sleep(1) 
-
-		print "netmgr is cleaning up!"
 		reactor.stop()
 		# allow the stop to actually be processed
 		reactor.iterate()
@@ -123,17 +109,12 @@ class IngressClientFactory(ReconnectingClientFactory):
 
 	def clientConnectionLost(self, connector, reason):
 		print 'Lost connection!\n'
-		print 'Reason: %s' % reason 
-		#TODO: attempt reconnect instead of failing out
-		#i.e. connector.connect()
+		#print 'Reason: %s' % reason 
 		ReconnectingClientFactory.clientConnectionFailed(
 				self, connector, reason) 
 		self.netMgr.quit = True
 	
 	def clientConnectionFailed(self, connector, reason):
-		#TODO: need this connectionFailed var?
-		self.netMgr.connectionFailed = True 
-
 		self.netMgr.failed = True
 		print 'Failed to connect to server.  Are you sure one is running at %s on port %d?' % (NetMgr.HOST, NetMgr.PORT)
 		self.netMgr.quit = True

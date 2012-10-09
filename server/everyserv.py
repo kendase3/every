@@ -83,7 +83,6 @@ class IngressProtocol(basic.LineReceiver):
 	
 			for now i guess we are the game
 		"""
-		print "lineReceived fired!"
 		# we assume a single stevent is steve-sent
 		stevent = self.depacketize(line) 		
 
@@ -91,7 +90,7 @@ class IngressProtocol(basic.LineReceiver):
 		print "handling input for player %d" % self.playerNum
 		# then it's up to us to also check for quit, game shouldn't have to call us
 		if stevent.type == Stevent.QUIT:
-			print "The server noticed it was quitting time!"
+			print "Player %d quit!" % self.playerNum 
 			self.handleQuit() 
 		screen = self.factory.board.getScreen(self.playerNum)  
 		transmission = self.packetize(screen)
@@ -100,7 +99,6 @@ class IngressProtocol(basic.LineReceiver):
 		#print "sent."
 
 	def handleQuit(self):
-		print "handleQuit happens!"
 		self.factory.removeUser(self)
 		#self.transport.loseConnection()
 		# abort causes immediate disconnect
