@@ -65,8 +65,7 @@ class NetMgr:
 				when we get a new one
 		"""
 		ret = self.screen 
-		#TODO: uncomment
-		#self.screen = None	
+		self.screen = None	
 		return ret
 	
 	def hasScreen(self):

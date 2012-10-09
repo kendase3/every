@@ -25,6 +25,7 @@ class SessionBuddy():
 	"""
 	def __init__(self): 
 		self.gfxMgr = CursesGfxMgr() 
+		#self.gfxMgr = GfxMgr() 
 		self.netMgr = NetMgr() 
 		if self.netMgr.failed: 
 			print "Failed to connect to server.  Are you sure one is running at %s on port %d?" % (
@@ -49,7 +50,7 @@ class SessionBuddy():
 			for i in range(0, LAST_HURRAH_LENGTH):
 				self.netMgr.iterate()
 		self.cleanup()
-	
+
 	def cleanup(self):
 		self.netMgr.cleanup()
 		self.gfxMgr.cleanup()
