@@ -81,6 +81,16 @@ def respondToInput(screen):
 	else:
 		screen.addstr(3, 0, "?!?", curses.color_pair(2))
 		return True
+
+def notWrapperInit(): 
+	screen = curses.initscr()
+	curses.noecho()
+	curses.cbreak()
+	screen.keypad(1)
+	# set custom tenths of a second to wait before giving up on waiting for input
+	curses.start_color() 
+	curses.halfdelay(5)
+	return screen
 	
 def hello(screen):
 	#screen.attron(curses.A_BOLD)
@@ -101,4 +111,12 @@ def hello(screen):
 	while respondToInput(screen):
 		screen.refresh()
 
-wrapper(hello)
+def notWrapperCleanup(screen):
+	curses.nocbreak()
+	screen.keypad(0)
+	curses.echo()
+	curses.endwin()
+
+screen = notWrapperInit()
+hello(screen)
+notWrapperCleanup(screen)
