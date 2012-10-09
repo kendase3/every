@@ -9,12 +9,23 @@ import sys
 
 sys.path.insert(0, os.path.join("..", "common")) 
 # local imports
-from gfxmgr import GfxMgr 
+#from gfxmgr import GfxMgr 
 from netmgr import NetMgr
-from cursesgfxmgr import CursesGfxMgr
+#from cursesgfxmgr import CursesGfxMgr
 
 #FIXME: note that this 'solution' has yet to do anything and will probably be removed
 LAST_HURRAH_LENGTH = 5 # how many times should we pump the network after quit?
+
+def frontendSelect():
+	while True:
+		choice = raw_input("Hello!  Please select your frontend:\n1) SDL\n2) Curses\n\n") 
+		choice = int(choice)
+		if choice == 1:
+			from gfxmgr import GfxMgr
+			return GfxMgr
+		elif choice == 2:
+			from cursesgfxmgr import CursesGfxMgr
+			return CursesGfxMgr
 
 class SessionBuddy():
 	"""
@@ -24,8 +35,11 @@ class SessionBuddy():
 			the other functions explicitly used in run
 	"""
 	def __init__(self): 
-		self.gfxMgr = CursesGfxMgr() 
+		#self.gfxMgr = CursesGfxMgr() 
 		#self.gfxMgr = GfxMgr() 
+		gfxMgr = frontendSelect()
+		print gfxMgr
+		self.gfxMgr = gfxMgr()
 		self.netMgr = NetMgr() 
 		if self.netMgr.failed: 
 			print "Failed to connect to server.  Are you sure one is running at %s on port %d?" % (
