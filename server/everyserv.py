@@ -121,7 +121,8 @@ class IngressFactory(protocol.ServerFactory):
 		IngressFactory.userList.append(user)
 
 	def removeUser(self, user):
-		self.board.removePlayer(user.playerNum)
+		#FIXME: previously removedUser twice 
+		#self.board.removePlayer(user.playerNum)
 		IngressFactory.userList.remove(user)
 	
 	def connectionLost(self, reason):

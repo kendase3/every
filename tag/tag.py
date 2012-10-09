@@ -33,7 +33,7 @@ class Board(Game):
 		self.board = [[Cell() for j in range(Board.WIDTH)]
 				for i in range(Board.HEIGHT)] 
 
-	def addPlayer(self, playerNumber): 
+	def addPlayer(self, playerId): 
 		targetX = random.randint(0, 9)
 		targetY = random.randint(0, 9)
 		targetCell = self.board[targetY][targetX]  
@@ -48,39 +48,47 @@ class Board(Game):
 			it = True
 			playerColor = AsciiPixel.RED
 			self.haveIt = True
-		newPlayer = Player(playerNumber, 
+		newPlayer = Player(playerId, 
 				playerColor, it, targetX, targetY) 	
 		targetCell.player = newPlayer
 		self.players.append(newPlayer) 
+		print "appended %s" % str(newPlayer)
 	
-	def removePlayer(self, playerNumber):
-		print "removePlayer fired!"
-		targetPlayer = self.players[playerNumber]
+	def removePlayer(self, playerId):
+		print "removePlayer fired! playerId=%d" % playerId 
+		print "ok, here is the playerlist before anything happens:\n" % (
+				#repr(self.players))
+				self.players)
+		targetPlayer = None
+		found = False
+		for i in range(0, len(self.players)):
+			if self.players[i].id == playerId:
+				print "FOUND THE PLAYER"
+				found = True
+				targetPlayer = self.players.pop(i) 
+				break	
+		if found == False:
+			print "oh no!"
 		if targetPlayer == None:
 			print "That's weird!"
 			return
 		targetCell = self.board[targetPlayer.y][targetPlayer.x]
 		targetCell.player = None
-		if targetPlayer.isIt and len(self.players) > 0:
-			while True:
-			#TODO: do-while
-				newIt = random.randint(0, len(self.players))
-				if self.players[newIt] != None:
-					print "decided player %d will be It" % newIt
-					self.players[newIt].isIt = True
-					break	
-		elif len(self.players) > 0:
+		if targetPlayer.isIt:
 			self.haveIt = False
-		self.players[playerNumber] = None
 		return 
 
-	def getPlayer(index):
-		return self.players[playerNumber]
+	def getPlayer(playerId):
+		for player in self.players:
+			if player.id == playerId:
+				return player
+		return None
 
-	def handleInput(self, stevent, playerIndex):
+	def handleInput(self, stevent, playerId):
 		if stevent.type == Stevent.QUIT:
-			print "The game noticed it was quitting time!" 
-			self.removePlayer(playerIndex) 
+			print "The game noticed it was quitting time for player %d!" % (
+					playerId) 
+			self.removePlayer(playerId) 
 		if stevent.type != Stevent.KEYDOWN:
 			return
 		"""
@@ -108,14 +116,14 @@ class Board(Game):
 		else:
 			# any other input is invalid
 			return
-		player = self.players[playerIndex]
+		player = self.getPlayerById(playerId)
 		newX = (player.x + xOffset) % Board.WIDTH 
 		newY = (player.y + yOffset) % Board.HEIGHT 
 		if self.board[newY][newX].player != None:
 			# then we dismiss the move
 			targetPlayer = self.board[newY][newX].player
 			print "player %d collided with player %d" % (
-					player.number, targetPlayer.number)  
+					player.id, targetPlayer.id)  
 			if player.isIt:
 				targetPlayer.isIt = True
 				targetPlayer.color = AsciiPixel.RED
@@ -128,7 +136,13 @@ class Board(Game):
 			player.x = newX
 			player.y = newY
 
-	def getScreen(self, playerNumber): 
+	def getPlayerById(self, id):
+		for player in self.players:
+			if player.id == id:
+				return player
+		return None
+
+	def getScreen(self, playerId): 
 		"""
 			so let me get this straight, steve
 			
