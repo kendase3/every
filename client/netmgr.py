@@ -14,6 +14,8 @@ class NetMgr:
 		2) this module sends all user input in the form of an event list to the server.
 	"""
 	HOST = "localhost"
+	#HOST = "mikefoss.com"
+	#HOST = "184.154.136.42"
 	PORT = 50025
 	LINE_ENDING = "\r\n"
 	#TODO: should eventually prompt for host and port 
@@ -129,7 +131,9 @@ class IngressClientFactory(ReconnectingClientFactory):
 		self.netMgr.quit = True
 	
 	def clientConnectionFailed(self, connector, reason):
+		#TODO: need this connectionFailed var?
 		self.netMgr.connectionFailed = True 
+
 		self.netMgr.failed = True
 		print 'Failed to connect to server.  Are you sure one is running at %s on port %d?' % (NetMgr.HOST, NetMgr.PORT)
 		self.netMgr.quit = True
