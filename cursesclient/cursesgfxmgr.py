@@ -13,52 +13,102 @@ from asciipixel import AsciiPixel
 
 class CursesGfxMgr(IGfxMgr):
 	def __init__(self): 
-		#TODO: how use wrapper?  what does wrapper call? 
-		#wrapper...
-		#curses.halfdelay(5)
 		IGfxMgr.__init__(self) 	
+		self.cursesScreen = curses.initscr()
+		curses.noecho()
+		curses.cbreak()
+		self.cursesScreen.keypad(1)
+		# set custom tenths of a second to wait before giving up on waiting for input
+		curses.start_color() 
+		curses.halfdelay(5)
 	
 	def updateWindowDimensions(self, numChars, numLines):
 		IGfxMgr.updateWindowDimensions(self, numChars, numLines)
 
 	def doQuit(self):
+		curses.nocbreak()
+		screen.keypad(0)
+		curses.echo()
+		curses.endwin()
 		IGfxMgr.doQuit(self)
 
 	def checkInput(self):
 		c = screen.getch() 
+		if c == curses.ERR:
+			# then there has been no input
+			return
+		# otherwise, the user input something
+		if c == ord('q') or c == curses.KEY_ESCAPE:
+			self.doQuit()	
+		elif self.keyIsEventable(c):
+			newStevent = Stevent(Stevent.KEYDOWN, c)
+			self.outgoing.append(newStevent) 
 		return
+
+	def keyIsEventable(self, key):
+		#TODO: move into ABC
+		if self.keyIsEnter(key) or self.keyIsBackspace(key) or self.keyIsTypeable(key):
+			return True
+		else:
+			return False
+
+	def keyIsTypeable(self, key):
+		if key >= 32 and key <= 126:
+			return True
+		else:
+			return False 
+
+	def keyIsEnter(self, key):
+		if key == curses.KEY_ENTER:
+			return True
+		else:
+			return False
+
+	def keyIsBackspace(self, key):
+		if key == curses.KEY_BACKSPACE:
+			return True
+		else:
+			return False
 	
 	def clearScreen(self):
-		#TODO
+		screen.clear()
 		return
 
 	def blitNetScreen(self):
-		#TODO
+		if self.netScreen == None:
+			self.blitDefaultScreen()
+			return
 		return
 
 	def blitDefaultScreen(self):
-		#TODO
+		screen.addstr("Retrieving initial screen...", curses.A_BOLD)
+		screen.refresh() 
 		return
 
 	def iterate(self):
 		self.checkInput() 
-		if self.netScreen == None:
-			self.blitDefaultScreen()
-		else:
-			self.blitNetScreen() 
+		self.blitNetScreen()
 		return
 
+	#TODO: both these two move into interface
 	def hasEvents(self):
-		#TODO
-		return
+		if len(self.outgoing) > 0:
+			return True
+		else:
+			return False
 
 	def popEvents(self):
-		#TODO
-		return
+		ret = self.outgoing[:]
+		self.outgoing = []
+		return ret
 
 	def cleanup(self):
-		#TODO
+		#TODO: redundant with doQuit?  refactor!
+		self.doQuit() 
 		return
+
+
+#TODO: get rid of this temporary crap below
 
 def respondToInput(screen):
 	problem = False
@@ -117,6 +167,7 @@ def notWrapperCleanup(screen):
 	curses.echo()
 	curses.endwin()
 
-screen = notWrapperInit()
-hello(screen)
-notWrapperCleanup(screen)
+if __name__ == "__main__":
+	screen = notWrapperInit()
+	hello(screen)
+	notWrapperCleanup(screen)
