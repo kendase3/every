@@ -12,6 +12,7 @@ sys.path.insert(0, os.path.join("..", "common"))
 from gfxmgr import GfxMgr 
 from netmgr import NetMgr
 
+#FIXME: note that this 'solution' has yet to do anything and will probably be removed
 LAST_HURRAH_LENGTH = 5 # how many times should we pump the network after quit?
 
 class SessionBuddy():

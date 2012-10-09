@@ -13,6 +13,9 @@ from asciipixel import AsciiPixel
 
 class CursesGfxMgr(IGfxMgr):
 	def __init__(self): 
+		#TODO: how use wrapper?  what does wrapper call? 
+		#wrapper...
+		#curses.halfdelay(5)
 		IGfxMgr.__init__(self) 	
 	
 	def updateWindowDimensions(self, numChars, numLines):
@@ -22,7 +25,7 @@ class CursesGfxMgr(IGfxMgr):
 		IGfxMgr.doQuit(self)
 
 	def checkInput(self):
-		#TODO
+		c = screen.getch() 
 		return
 	
 	def clearScreen(self):
@@ -38,7 +41,11 @@ class CursesGfxMgr(IGfxMgr):
 		return
 
 	def iterate(self):
-		#TODO
+		self.checkInput() 
+		if self.netScreen == None:
+			self.blitDefaultScreen()
+		else:
+			self.blitNetScreen() 
 		return
 
 	def hasEvents(self):
@@ -94,6 +101,4 @@ def hello(screen):
 	while respondToInput(screen):
 		screen.refresh()
 
-#wrapper(hello)
-cur = CursesGfxMgr()
-print "%d" % cur.quit
+wrapper(hello)
