@@ -100,10 +100,11 @@ class IngressProtocol(basic.LineReceiver):
 		#print "sent."
 
 	def handleQuit(self):
+		print "handleQuit happens!"
 		self.factory.removeUser(self)
 		#self.transport.loseConnection()
 		# abort causes immediate disconnect
-		self.transport.abortConnection()
+		self.transport.loseConnection()
 
 class IngressFactory(protocol.ServerFactory):
 	protocol = IngressProtocol
@@ -122,6 +123,9 @@ class IngressFactory(protocol.ServerFactory):
 	def removeUser(self, user):
 		self.board.removePlayer(user.playerNum)
 		IngressFactory.userList.remove(user)
+	
+	def connectionLost(self, reason):
+		print "we lost a connection :["
 
 reactor.listenTCP(PORT, IngressFactory())
 reactor.run()

@@ -56,17 +56,20 @@ class Board(Game):
 	def removePlayer(self, playerNumber):
 		print "removePlayer fired!"
 		targetPlayer = self.players[playerNumber]
+		if targetPlayer == None:
+			print "That's weird!"
+			return
 		targetCell = self.board[targetPlayer.y][targetPlayer.x]
 		targetCell.player = None
-		if targetPlayer.isIt and len(self.player) > 0:
+		if targetPlayer.isIt and len(self.players) > 0:
 			while True:
 			#TODO: do-while
-				newIt = random.rand_int(0, len(self.players))
+				newIt = random.randint(0, len(self.players))
 				if self.players[newIt] != None:
 					print "decided player %d will be It" % newIt
 					self.players[newIt].isIt = True
 					break	
-		elif len(self.player) > 0:
+		elif len(self.players) > 0:
 			self.haveIt = False
 		self.players[playerNumber] = None
 		return 

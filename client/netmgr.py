@@ -1,9 +1,10 @@
 
-from twisted.internet import reactor
+from twisted.internet import defer, reactor
 from twisted.protocols import basic
 from twisted.internet.protocol import Protocol, ReconnectingClientFactory
-import pickle
+from time import sleep
 
+# local
 import screen
 import stevent
 
@@ -14,8 +15,6 @@ class NetMgr:
 		2) this module sends all user input in the form of an event list to the server.
 	"""
 	HOST = "localhost"
-	#HOST = "mikefoss.com"
-	#HOST = "184.154.136.42"
 	PORT = 50025
 	LINE_ENDING = "\r\n"
 	#TODO: should eventually prompt for host and port 
@@ -78,6 +77,13 @@ class NetMgr:
 			return True
 
 	def cleanup(self):
+		#TODO: we should terminate the connection here
+		if self.client != None:
+			#FIXME: Client object has no abortConnection
+			#self.client.transport.abortConnection() 		
+			self.client.transport.loseConnection() 		
+			sleep(1) 
+
 		print "netmgr is cleaning up!"
 		reactor.stop()
 		# allow the stop to actually be processed
@@ -86,7 +92,6 @@ class NetMgr:
 class IngressClient(basic.LineReceiver):
 	def __init__(self, netMgr):
 		self.netMgr = netMgr 
-		#self.setRawMode() # now accepts raw data
 
 	def lineReceived(self, line):
 		# we assume it is a screen update 
@@ -94,10 +99,6 @@ class IngressClient(basic.LineReceiver):
 		#print "USING LINE MODE!"
 		self.netMgr.receiveScreen(line)
 	
-	def rawDataReceived(self, data):
-		#print "USING RAW MODE!"
-		self.netMgr.receiveScreen(data) 
-
 	def sendMessage(self, line):
 		# send out the message
 		#print "sending|%s|" % (line + NetMgr.LINE_ENDING)
