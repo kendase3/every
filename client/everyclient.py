@@ -24,7 +24,7 @@ class SessionBuddy():
 			the other functions explicitly used in run
 	"""
 	def __init__(self): 
-		self.gfxMgr = GfxMgr() 
+		self.gfxMgr = CursesGfxMgr() 
 		self.netMgr = NetMgr() 
 		if self.netMgr.failed: 
 			print "Failed to connect to server.  Are you sure one is running at %s on port %d?" % (

@@ -26,6 +26,10 @@ class IGfxMgr:
 		return 
 
 	@abc.abstractmethod
+	def updateScreen(self, netScreen):
+		self.netScreen = netScreen
+
+	@abc.abstractmethod
 	def doQuit(self): 
 		newStevent = Stevent(Stevent.QUIT)
 		self.outgoing.append(newStevent) 

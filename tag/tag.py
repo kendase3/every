@@ -58,14 +58,16 @@ class Board(Game):
 		targetPlayer = self.players[playerNumber]
 		targetCell = self.board[targetPlayer.y][targetPlayer.x]
 		targetCell.player = None
-		if targetPlayer.isIt:
+		if targetPlayer.isIt and len(self.player) > 0:
 			while True:
 			#TODO: do-while
-				newIt = random.randInt(0, len(self.players))
+				newIt = random.rand_int(0, len(self.players))
 				if self.players[newIt] != None:
 					print "decided player %d will be It" % newIt
 					self.players[newIt].isIt = True
 					break	
+		elif len(self.player) > 0:
+			self.haveIt = False
 		self.players[playerNumber] = None
 		return 
 

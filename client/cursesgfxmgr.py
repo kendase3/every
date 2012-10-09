@@ -19,6 +19,9 @@ class CursesGfxMgr(IGfxMgr):
 	DUMMY_COLOR = RED_PAIR
 	def __init__(self): 
 		IGfxMgr.__init__(self) 	
+		self.numLines = 25
+		self.numChars = 80 	# assume a standard nethack screen to begin 
+							# (does not matter to curses)
 		self.cursesScreen = curses.initscr()
 		curses.noecho()
 		curses.cbreak()
@@ -33,20 +36,23 @@ class CursesGfxMgr(IGfxMgr):
 	def updateWindowDimensions(self, numChars, numLines):
 		IGfxMgr.updateWindowDimensions(self, numChars, numLines)
 
+	def updateScreen(self, netScreen):
+		IGfxMgr.updateScreen(self, netScreen)
+
 	def doQuit(self):
 		curses.nocbreak()
-		screen.keypad(0)
+		self.cursesScreen.keypad(0)
 		curses.echo()
 		curses.endwin()
 		IGfxMgr.doQuit(self)
 
 	def checkInput(self):
-		c = screen.getch() 
+		c = self.cursesScreen.getch() 
 		if c == curses.ERR:
 			# then there has been no input
 			return
 		# otherwise, the user input something
-		if c == ord('q') or c == curses.KEY_ESCAPE:
+		if c == ord('q') or c == curses.ascii.ESC:
 			self.doQuit()	
 		elif self.keyIsEventable(c):
 			newStevent = Stevent(Stevent.KEYDOWN, c)
@@ -79,13 +85,14 @@ class CursesGfxMgr(IGfxMgr):
 			return False
 	
 	def clearScreen(self):
-		screen.clear()
+		self.cursesScreen.clear()
 		return
 
 	def blitNetScreen(self):
 		if self.netScreen == None:
 			self.blitDefaultScreen()
 			return
+		self.clearScreen() 
 		if len(self.netScreen.screen) != self.numLines and (
 				len(self.netScreen.screen[0]) != self.numChars):
 			# then we require a window resize	
@@ -103,19 +110,20 @@ class CursesGfxMgr(IGfxMgr):
 					asciiChar = chr(asciiPixel.ascii)
 					if asciiPixel.color == AsciiPixel.BLUE:
 						# then we set the color to blue
-						colorNum = CursesGfxMgr.BLUE
+						colorPair = CursesGfxMgr.BLUE_PAIR
 					elif asciiPixel.color == AsciiPixel.RED:
 						# you get the idea
-						colorNum = CursesGfxMgr.RED
+						colorPair = CursesGfxMgr.RED_PAIR
 					else:
 						# if it's unknown, we just assume white
 						colorNum = 0
-				screen.addstr(i, j, asciiChar, curses.color_pair(colorPair))
+				self.cursesScreen.addstr(i, j, asciiChar, curses.color_pair(colorPair))
 		return
 
 	def blitDefaultScreen(self):
-		screen.addstr("Retrieving initial screen...", curses.A_BOLD)
-		screen.refresh() 
+		self.clearScreen() 
+		self.cursesScreen.addstr("Retrieving initial screen...", curses.A_BOLD)
+		self.cursesScreen.refresh() 
 		return
 
 	def iterate(self):
