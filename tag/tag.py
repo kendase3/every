@@ -80,7 +80,7 @@ class Board(Game):
 			self.haveIt = False
 		return 
 
-	def getPlayer(playerId):
+	def getPlayer(self, playerId):
 		for player in self.players:
 			if player.id == playerId:
 				return player
