@@ -93,13 +93,8 @@ class IngressProtocol(basic.LineReceiver):
 		if stevent.type == Stevent.QUIT:
 			print "Player %d quit!" % self.playerNum 
 			self.handleQuit() 
-		#TODO: it might be a good idea to keep this anyway, and send more screens
-		#			than the  minimum upon input
-		#screen = self.factory.board.getScreen(self.playerNum)  
-		#transmission = self.packetize(screen)
-		#print "sending this screen update...\n%s" % transmission 
-		#self.transport.write(str(transmission) + LINE_ENDING) 
-		#print "sent."
+		# to provide a feel of feedback, we respond to every keypress
+		self.sendScreen()
 
 	def sendScreen(self):
 		screen = self.factory.board.getScreen(self.playerNum)  
