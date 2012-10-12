@@ -6,15 +6,25 @@ class Game:
 		an abstract base class 
 	"""
 	__metaclass__ = abc.ABCMeta
+
 	@abc.abstractmethod
 	def __init__(self):
 		return
+
+	# handle game logic independent of player events
+	@abc.abstractmethod
+	def iterate(self):
+		return
+
 	@abc.abstractmethod
 	def addPlayer(self, playerNumber):
 		return 
+
+	# including player quit events
 	@abc.abstractmethod
 	def handleInput(self, stevent, playerIndex):
 		return
+
 	@abc.abstractmethod
 	def getScreen(self, playerNumber):
 		return

@@ -1,5 +1,7 @@
 #! /usr/bin/env python
 
+print "QUACK\nQUACK\nQUACK"
+
 class Cell:
 	"""
 		what sorts of things does a standable

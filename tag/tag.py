@@ -33,6 +33,9 @@ class Board(Game):
 		self.board = [[Cell() for j in range(Board.WIDTH)]
 				for i in range(Board.HEIGHT)] 
 
+	def iterate(self):
+		return
+
 	def addPlayer(self, playerId): 
 		targetX = random.randint(0, 9)
 		targetY = random.randint(0, 9)
@@ -109,7 +112,7 @@ class Board(Game):
 		else:
 			# any other input is invalid
 			return
-		player = self.getPlayerById(playerId)
+		player = self.getPlayer(playerId)
 		newX = (player.x + xOffset) % Board.WIDTH 
 		newY = (player.y + yOffset) % Board.HEIGHT 
 		if self.board[newY][newX].player != None:
@@ -128,12 +131,6 @@ class Board(Game):
 			self.board[newY][newX].player = player 
 			player.x = newX
 			player.y = newY
-
-	def getPlayerById(self, id):
-		for player in self.players:
-			if player.id == id:
-				return player
-		return None
 
 	def getScreen(self, playerId): 
 		"""
