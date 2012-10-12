@@ -9,7 +9,7 @@ import sys
 
 sys.path.insert(0, os.path.join("..", "common")) 
 # local imports
-#from gfxmgr import GfxMgr 
+from gfxmgr import GfxMgr 
 from netmgr import NetMgr
 #from cursesgfxmgr import CursesGfxMgr
 
@@ -34,9 +34,8 @@ class SessionBuddy():
 	def __init__(self): 
 		#self.gfxMgr = CursesGfxMgr() 
 		#self.gfxMgr = GfxMgr() 
-		gfxMgr = frontendSelect()
-		print gfxMgr
-		self.gfxMgr = gfxMgr()
+		#gfxMgr = frontendSelect()
+		self.gfxMgr = GfxMgr()
 		self.netMgr = NetMgr() 
 		if self.netMgr.failed: 
 			print "Failed to connect to server.  Are you sure one is running at %s on port %d?" % (

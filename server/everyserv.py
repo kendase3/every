@@ -26,7 +26,7 @@ from asciipixel import AsciiPixel
 #constants
 PORT = 50025 
 LINE_ENDING = "\r\n"
-FPS = 2
+FPS = 1 
 
 import binder
 from game import Game, getGame 
@@ -139,7 +139,9 @@ while True:
 	if factory.board != None:
 		factory.board.iterate()
 		curTime = time.time()
-		if curTime - lastSentScreen > 1.0 / FPS:
-			lastScreenSent = curTime
+		delta = curTime - lastSentScreen
+		if delta > 1.0 / FPS:
+			print "delta=%f > %f so sending screen!" % (delta, 1.0 / FPS)
+			lastSentScreen = curTime
 			for user in factory.userList:
 				user.sendScreen()
