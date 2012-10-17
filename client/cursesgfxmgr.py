@@ -34,6 +34,7 @@ class CursesGfxMgr(IGfxMgr):
 		curses.init_pair(1, curses.COLOR_RED, curses.COLOR_BLACK) 
 		curses.init_pair(2, curses.COLOR_BLUE, curses.COLOR_BLACK) 
 		curses.init_pair(3, curses.COLOR_YELLOW, curses.COLOR_BLACK) 
+		curses.init_pair(4, curses.COLOR_WHITE, curses.COLOR_BLACK) 
 	
 	def updateWindowDimensions(self, numChars, numLines):
 		IGfxMgr.updateWindowDimensions(self, numChars, numLines)
@@ -107,7 +108,8 @@ class CursesGfxMgr(IGfxMgr):
 		for i in range(0, self.netScreen.height):
 			for j in range(0, self.netScreen.width):
 				asciiPixel = self.netScreen.screen[i][j]
-				colorPair = 0
+				# default is white on black
+				colorPair = 0 
 				if asciiPixel.ascii == AsciiPixel.DUMMY:
 					asciiChar = CursesGfxMgr.DUMMY_CHAR
 					colorVal = CursesGfxMgr.DUMMY_COLOR
