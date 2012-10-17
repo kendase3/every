@@ -29,6 +29,7 @@ class AsciiPixel:
 			self.ascii = ascii
 		else:
 			self.ascii = ord(ascii) 
+		# this lookup does add in some overhead every asciiPixel render
 		if isinstance(color, int):
 			for curColor in AsciiPixel.COLORS:
 				if curColor[0] == color:

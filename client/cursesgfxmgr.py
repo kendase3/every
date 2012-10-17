@@ -15,6 +15,9 @@ class CursesGfxMgr(IGfxMgr):
 	RED_PAIR = 1
 	BLUE_PAIR = 2 
 	YELLOW_PAIR = 3
+	GREEN_PAIR = 4
+	MAGENTA_PAIR = 5
+	CYAN_PAIR = 6
 	DUMMY_CHAR = '~'
 	DUMMY_COLOR = RED_PAIR
 	def __init__(self): 
@@ -35,6 +38,8 @@ class CursesGfxMgr(IGfxMgr):
 		curses.init_pair(2, curses.COLOR_BLUE, curses.COLOR_BLACK) 
 		curses.init_pair(3, curses.COLOR_YELLOW, curses.COLOR_BLACK) 
 		curses.init_pair(4, curses.COLOR_WHITE, curses.COLOR_BLACK) 
+		curses.init_pair(5, curses.COLOR_MAGENTA, curses.COLOR_BLACK) 
+		curses.init_pair(6, curses.COLOR_CYAN, curses.COLOR_BLACK) 
 	
 	def updateWindowDimensions(self, numChars, numLines):
 		IGfxMgr.updateWindowDimensions(self, numChars, numLines)
@@ -112,7 +117,7 @@ class CursesGfxMgr(IGfxMgr):
 				colorPair = 0 
 				if asciiPixel.ascii == AsciiPixel.DUMMY:
 					asciiChar = CursesGfxMgr.DUMMY_CHAR
-					colorVal = CursesGfxMgr.DUMMY_COLOR
+					colorPair = CursesGfxMgr.DUMMY_COLOR
 				else:
 					asciiChar = chr(asciiPixel.ascii)
 					if asciiPixel.color == AsciiPixel.BLUE:
@@ -121,6 +126,14 @@ class CursesGfxMgr(IGfxMgr):
 					elif asciiPixel.color == AsciiPixel.RED:
 						# you get the idea
 						colorPair = CursesGfxMgr.RED_PAIR
+					elif asciiPixel.color == AsciiPixel.YELLOW:
+						colorPair = CursesGfxMgr.YELLOW_PAIR
+					elif asciiPixel.color == AsciiPixel.GREEN:
+						colorPair = CursesGfxMgr.GREEN_PAIR
+					elif asciiPixel.color == AsciiPixel.MAGENTA:
+						colorPair = CursesGfxMgr.MAGENTA_PAIR
+					elif asciiPixel.color == AsciiPixel.CYAN:
+						colorPair = CursesGfxMgr.CYAN_PAIR 
 					else:
 						# if it's unknown, we just assume white
 						colorNum = 0
