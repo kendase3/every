@@ -122,7 +122,7 @@ def byte(screen):
 	for row in screen.screen:
 		for asciipixel in row:
 			msg.extend(struct.pack(
-					"BB", asciipixel.ascii, asciipixel.color)) 
+					"BB", asciipixel.ascii, asciipixel.color[0])) 
 	return msg
 
 def unbyte(screenBytes): 

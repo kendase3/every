@@ -6,34 +6,46 @@ class AsciiPixel:
 	DEFAULT_GREEN = 255
 	DEFAULT_BLUE = 255
 	MAX_COLOR_INDEX = 4
-	WHITE = 0
-	BLACK = 1
-	RED = 2
-	GREEN = 3
-	BLUE = 4
-	"""
-	YELLOW = 5
-	ORANGE = 6
-	PURPLE = 7
-	PINK = 8
-	"""
+	COLORS = []
+	WHITE = 0, 'white', 255, 255, 255 
+	COLORS.append(WHITE)
+	BLACK = 1, 'black', 0, 0, 0 
+	COLORS.append(BLACK)
+	RED = 2, 'red', 255, 0, 0 
+	COLORS.append(RED)
+	GREEN = 3, 'green', 0, 255, 0 
+	COLORS.append(GREEN)
+	BLUE = 4, 'blue', 0, 0, 255 
+	COLORS.append(BLUE)
+	YELLOW = 5, 'yellow', 255, 255, 0
+	COLORS.append(YELLOW)
+	MAGENTA = 6, 'magenta', 255, 0, 255 #TODO: ? 
+	COLORS.append(MAGENTA)
+	CYAN = 7, 'cyan', 0, 255, 255 
+	COLORS.append(CYAN)
 	def __init__(self, ascii=DEFAULT_ASCII, 
 				color=WHITE):
-		if type(ascii) is int: 
+		if isinstance(ascii, int): 
 			self.ascii = ascii
 		else:
 			self.ascii = ord(ascii) 
-		self.color = color
+		if isinstance(color, int):
+			for curColor in AsciiPixel.COLORS:
+				if curColor[0] == color:
+					self.color = curColor
+		else:
+			# we assume it's a full color list
+			self.color = color
 	
 	def __repr__(self):
 		if self.ascii == AsciiPixel.DUMMY:
 			return "Dummy "
 		ret = "(ASCII=%s," % chr(self.ascii)
-		ret += " Color=%d) " % self.color 
+		ret += " Color=%s) " % self.color[1] 
 		return ret
 	
 	def __str__(self):
-		return "%d,%d" % (self.ascii, self.color)
+		return "%d,%d" % (self.ascii, self.color[0])
 
 	def __eq__(self, other):
 		if self.ascii == other.ascii and (
@@ -43,23 +55,13 @@ class AsciiPixel:
 			return False	
 
 	def getRed(self):
-		# only consider white, black, red, green, blue
-		if self.color == AsciiPixel.WHITE or self.color == AsciiPixel.RED:
-			return 255
-		else:
-			return 0
+		return self.color[2]
 
 	def getGreen(self):
-		if self.color == AsciiPixel.WHITE or self.color == AsciiPixel.GREEN:
-			return 255
-		else:
-			return 0 
+		return self.color[3]
 	
 	def getBlue(self):
-		if self.color == AsciiPixel.WHITE or self.color == AsciiPixel.BLUE:
-			return 255
-		else:
-			return 0
+		return self.color[4]
 
 if __name__=="__main__":
 	"""
