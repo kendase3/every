@@ -15,7 +15,7 @@ from netmgr import NetMgr
 
 def frontendSelect():
 	while True:
-		choice = raw_input("Hello!  Please select your frontend:\n1) SDL\n2) Curses\n\n") 
+		choice = raw_input("Please select your frontend:\n1) SDL\n2) Curses\n\n>") 
 		choice = int(choice)
 		if choice == 1:
 			from gfxmgr import GfxMgr
@@ -32,11 +32,15 @@ class SessionBuddy():
 			the other functions explicitly used in run
 	"""
 	def __init__(self): 
+		host = raw_input('Please enter host>')
+		#TODO: 2 or 1?
+		if len(host) < 2:
+			host = None
 		#self.gfxMgr = CursesGfxMgr() 
 		#self.gfxMgr = GfxMgr() 
 		gfxMgr = frontendSelect()
 		self.gfxMgr = gfxMgr()
-		self.netMgr = NetMgr() 
+		self.netMgr = NetMgr(host) 
 		if self.netMgr.failed: 
 			print "Failed to connect to server.  Are you sure one is running at %s on port %d?" % (
 					NetMgr.HOST, NetMgr.PORT)

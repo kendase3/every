@@ -21,8 +21,10 @@ class NetMgr:
 	# and remember a list of previously used hosts and ports
 	# (or at least the last one) 
 
-	def __init__(self):
-		reactor.connectTCP(NetMgr.HOST, NetMgr.PORT, IngressClientFactory(self))
+	def __init__(self, host=None):
+		if host == None:
+			host = NetMgr.HOST
+		reactor.connectTCP(host, NetMgr.PORT, IngressClientFactory(self))
 		reactor.startRunning(False) 
 		self.screen = None
 		self.client = None
