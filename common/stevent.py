@@ -10,6 +10,10 @@ class Stevent:
 	KEYDOWN = 0
 	KEYUP = 1
 	QUIT = 2
+	
+	# handy ascii constants
+	BACKSPACE = 8
+	ENTER = ord('\n')
 
 	def __init__(self, eventType, key=0): 
 		"""

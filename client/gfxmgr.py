@@ -222,7 +222,7 @@ class GfxMgr:
 		else:
 			# then things get pretty real
 			if self.keyIsTypeable(key):
-				# the upper-case letters are actually higher up in ascii table
+				# the lower-case letters are actually higher up in ascii table
 				return key - 32
 			elif self.keyIsNumbery(key):
 				# then (sigh) we handle them all manually
