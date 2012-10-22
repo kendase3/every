@@ -76,7 +76,7 @@ class CursesGfxMgr(IGfxMgr):
 			return False
 
 	def keyIsTypeable(self, key):
-		if key >= 32 and key <= 126:
+		if key >= 32 and key <= 126 or key == 15 or key == 17:
 			return True
 		else:
 			return False 
