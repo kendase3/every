@@ -78,7 +78,10 @@ class GfxMgr:
 					# quit is basically the only thing handled locally
 					# 	at least until this novelty fails
 					self.doQuit()
-				if self.keyIsShift(event.key):
+				elif self.keyIsEnter(event.key):
+					newStevent = Stevent(Stevent.KEYDOWN, ord('\n'))
+					self.outgoing.append(newStevent)
+				elif self.keyIsShift(event.key):
 					#TODO: modify the keys typed
 					self.shift = True
 				elif self.keyIsEventable(event.key):
