@@ -63,7 +63,13 @@ class CursesGfxMgr(IGfxMgr):
 		# otherwise, the user input something
 		if c == curses.ascii.ESC:
 			self.doQuit()	
-		elif self.keyIsEventable(c):
+		elif self.keyIsEnter(c):
+			newStevent = Stevent(Stevent.KEYDOWN, Stevent.ENTER)
+			self.outgoing.append(newStevent)
+		elif self.keyIsBackspace(c):
+			newStevent = Stevent(Stevent.KEYDOWN, Stevent.BACKSPACE)
+			self.outgoing.append(newStevent)
+		elif self.keyIsTypeable(c):
 			newStevent = Stevent(Stevent.KEYDOWN, c)
 			self.outgoing.append(newStevent) 
 		return
@@ -82,7 +88,7 @@ class CursesGfxMgr(IGfxMgr):
 			return False 
 
 	def keyIsEnter(self, key):
-		if key == curses.KEY_ENTER:
+		if key == curses.ascii.LF:
 			return True
 		else:
 			return False
