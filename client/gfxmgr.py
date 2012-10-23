@@ -213,45 +213,60 @@ class GfxMgr:
 		self.outgoing = []
 		return ret 
 
+	def keyIsNumbery(self, key):
+		if (key >= ord('0') and key <= ord('9')) or key == ord('/'):
+			return True
+		else:
+			return False 
+
+	def keyIsSpace(self, key):
+		if key == ord(' '):
+			return True
+		else:
+			return False
+
 	def shiftify(self, key): 
 		"""
 			uses status of shift key to determine actual key sent	
 		"""
-		if self.shift == False or self.keyIsEnter(key) or self.keyIsBackspace(key):
+		if self.shift == False or self.keyIsEnter(key) or (
+				self.keyIsBackspace(key) or self.keyIsSpace(key)):
 			return key
 		else:
 			# then things get pretty real
-			if self.keyIsTypeable(key):
+			if self.keyIsNumbery(key):
+				# then (sigh) we handle them all manually
+				if key == ord('`'):
+					return ord('~')
+				elif key == ord('1'):
+					return ord('!')
+				elif key == ord('2'):
+					return ord('@')
+				elif key == ord('3'):
+					return ord('#')
+				elif key == ord('4'):
+					return ord('$')
+				elif key == ord('5'):
+					return ord('%')
+				elif key == ord('6'):
+					return ord('^')
+				elif key == ord('7'):
+					return ord('&')
+				elif key == ord('8'):
+					return ord('*')
+				elif key == ord('9'):
+					return ord('(')
+				elif key == ord('0'):
+					return ord(')')
+				elif key == ord('-'):
+					return ord('_')
+				elif key == ord('='):
+					return ord('+') 
+				elif key == ord('/'):
+					return ord('?')
+			elif self.keyIsTypeable(key):
 				# the lower-case letters are actually higher up in ascii table
 				return key - 32
-			elif self.keyIsNumbery(key):
-				# then (sigh) we handle them all manually
-				if key == '`':
-					return '~'
-				elif key == '1':
-					return '!'
-				elif key == '2':
-					return '@'
-				elif key == '3':
-					return '#'
-				elif key == '4':
-					return '$'
-				elif key == '5':
-					return '%'
-				elif key == '6':
-					return '^'
-				elif key == '7':
-					return '&'
-				elif key == '8':
-					return '*'
-				elif key == 9:
-					return '('
-				elif key == '0':
-					return ')'
-				elif key == '-':
-					return '_'
-				elif key == '=':
-					return '+' 
 			else:
 				print "uh, this key is not supported bro.  just returning it."
 				return key

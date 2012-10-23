@@ -14,6 +14,8 @@ class Stevent:
 	# handy ascii constants
 	BACKSPACE = 8
 	ENTER = ord('\n')
+	QUESTION_MARK = 63 
+	EXCLAIMATION_POINT = 33 
 
 	def __init__(self, eventType, key=0): 
 		"""
