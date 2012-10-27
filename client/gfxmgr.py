@@ -19,12 +19,9 @@ from asciipixel import AsciiPixel
 class GfxMgr:
 	WIGGLE_ROOM_WIDTH = 70 
 	WIGGLE_ROOM_HEIGHT = 100 
+	FONT_RATIO = 7.0 / 5.0 # ratio of font height / width
 	#FONT_SIZE = 14 # i.e. font height 
-	#FONT_WIDTH = 10 
-	#FONT_SIZE = 20
-	#FONT_WIDTH = 14
 	FONT_SIZE = 30
-	FONT_WIDTH = 22 
 	FONT_FILE = "freemonobold.ttf"
 	DUMMY_CHAR = "~"
 	DUMMY_RED = 255
@@ -40,7 +37,11 @@ class GfxMgr:
 		winWidth = info.current_w - GfxMgr.WIGGLE_ROOM_WIDTH 
 		winHeight = info.current_h - GfxMgr.WIGGLE_ROOM_HEIGHT 
 		self.numLines = winHeight / GfxMgr.FONT_SIZE
-		self.numChars = winWidth / GfxMgr.FONT_WIDTH
+		self.fontWidth = int(GfxMgr.FONT_SIZE / GfxMgr.FONT_RATIO)
+		self.numChars = winWidth / self.fontWidth
+ 
+		#TODO: numLines and numChars will be fixed
+
 		# screen is what gfxmgr calls the literal graphics context
 		self.screen = pygame.display.set_mode((winWidth, winHeight))
 		# netScreen is what gfxmgr calls the 'screen' object
@@ -62,7 +63,7 @@ class GfxMgr:
 	def updateWindowDimensions(self, numChars, numLines):
 		self.numChars = numChars
 		self.numLines = numLines
-		winWidth = GfxMgr.FONT_WIDTH * numChars 
+		winWidth = self.fontWidth * numChars 
 		winHeight = GfxMgr.FONT_SIZE * numLines  
 		self.screen = pygame.display.set_mode((winWidth, winHeight))
 
@@ -191,7 +192,7 @@ class GfxMgr:
 						redVal, greenVal, blueVal)) 
 				# textpos is x,y in pixels i think
 				# NOTE: the font width is a lil flexible because of AA 
-				textpos = (j * GfxMgr.FONT_WIDTH, i * GfxMgr.FONT_SIZE) 
+				textpos = (j * self.fontWidth, i * GfxMgr.FONT_SIZE) 
 				self.background.blit(text, textpos)
 		self.needBlit = False
 
