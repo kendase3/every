@@ -17,6 +17,7 @@ from screen import Screen
 from asciipixel import AsciiPixel
 
 class GfxMgr:
+	CAPTION = "EveryClient"
 	WIGGLE_ROOM_WIDTH = 30 
 	WIGGLE_ROOM_HEIGHT = 100 
 	FONT_RATIO = 7.0 / 5.0 # ratio of font height / width 
@@ -56,7 +57,7 @@ class GfxMgr:
 				(self.winWidth, self.winHeight))
 		# netScreen is what gfxmgr calls the 'screen' object
 		self.netScreen = None
-		pygame.display.set_caption('EveryClient') 
+		pygame.display.set_caption(GfxMgr.CAPTION) 
 		pygame.mouse.set_visible(0) # hide mouse
 		self.clearScreen()
 		if not pygame.font:
@@ -76,10 +77,8 @@ class GfxMgr:
 		self.fontWidth = self.initialWinWidth / numChars 
 		self.fontSize = self.initialWinHeight / numLines  
 		# we use the smaller of the two
-		print "initial size=%d, width=%d" % (self.fontSize, self.fontWidth)
 		self.fontWidth = int(min(self.fontWidth, self.fontSize / GfxMgr.FONT_RATIO))
 		self.fontSize = int(min(self.fontSize, self.fontWidth * GfxMgr.FONT_RATIO)) 
-		print "adjusted size=%d, width=%d" % (self.fontSize, self.fontWidth)
 		self.winWidth = self.fontWidth * numChars 
 		self.winHeight = self.fontSize * numLines  
 		self.screen = pygame.display.set_mode((self.winWidth, self.winHeight))
