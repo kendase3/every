@@ -76,8 +76,10 @@ class GfxMgr:
 		self.fontWidth = self.initialWinWidth / numChars 
 		self.fontSize = self.initialWinHeight / numLines  
 		# we use the smaller of the two
+		print "initial size=%d, width=%d" % (self.fontSize, self.fontWidth)
 		self.fontWidth = int(min(self.fontWidth, self.fontSize / GfxMgr.FONT_RATIO))
 		self.fontSize = int(min(self.fontSize, self.fontWidth * GfxMgr.FONT_RATIO)) 
+		print "adjusted size=%d, width=%d" % (self.fontSize, self.fontWidth)
 		self.winWidth = self.fontWidth * numChars 
 		self.winHeight = self.fontSize * numLines  
 		self.screen = pygame.display.set_mode((self.winWidth, self.winHeight))
