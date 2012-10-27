@@ -21,6 +21,10 @@ class GfxMgr:
 	WIGGLE_ROOM_HEIGHT = 100 
 	FONT_SIZE = 14 # i.e. font height 
 	FONT_WIDTH = 10 
+	#FONT_SIZE = 20
+	#FONT_WIDTH = 14
+	#FONT_SIZE = 30
+	#FONT_WIDTH = 22 
 	FONT_FILE = "freemonobold.ttf"
 	DUMMY_CHAR = "~"
 	DUMMY_RED = 255
