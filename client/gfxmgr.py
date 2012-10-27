@@ -11,7 +11,7 @@
 
 import pygame
 from pygame.locals import *
-import sys, os
+import sys, os, time 
 from stevent import Stevent
 from screen import Screen
 from asciipixel import AsciiPixel
@@ -19,12 +19,12 @@ from asciipixel import AsciiPixel
 class GfxMgr:
 	WIGGLE_ROOM_WIDTH = 70 
 	WIGGLE_ROOM_HEIGHT = 100 
-	FONT_SIZE = 14 # i.e. font height 
-	FONT_WIDTH = 10 
+	#FONT_SIZE = 14 # i.e. font height 
+	#FONT_WIDTH = 10 
 	#FONT_SIZE = 20
 	#FONT_WIDTH = 14
-	#FONT_SIZE = 30
-	#FONT_WIDTH = 22 
+	FONT_SIZE = 30
+	FONT_WIDTH = 22 
 	FONT_FILE = "freemonobold.ttf"
 	DUMMY_CHAR = "~"
 	DUMMY_RED = 255
@@ -55,6 +55,9 @@ class GfxMgr:
 
 		# whether or not shift is pressed 
 		self.shift = False
+
+		#TEMP
+		self.fpsItr = 0
 
 	def updateWindowDimensions(self, numChars, numLines):
 		self.numChars = numChars
@@ -148,10 +151,23 @@ class GfxMgr:
 		self.background.fill((0, 0, 0)) 
 
 	def blit(self):
+		startTime = time.time()
 		self.clearScreen()
 		self.blitNetScreen()
+
+		# brand new!
+		# brand dumb more like
+		#self.background = self.background.convert()
+
 		self.screen.blit(self.background, (0, 0))
 		pygame.display.flip()
+
+		if self.fpsItr == 10:
+			endTime = time.time()
+			print "FPS = %E" % (1 / (endTime - startTime))
+			self.fpsItr = 0
+		else:
+			self.fpsItr += 1
 
 	def blitNetScreen(self):
 		if self.netScreen == None:
@@ -164,6 +180,7 @@ class GfxMgr:
 			newNumLines = len(self.netScreen.screen) 
 			newNumChars = len(self.netScreen.screen[0])  
 			self.updateWindowDimensions(newNumChars, newNumLines)
+		#TODO: make a list of dirty lines and only update them  
 		for i in range(0, self.netScreen.height):
 			for j in range(0, self.netScreen.width): 
 				asciiPixel = self.netScreen.screen[i][j] 
@@ -181,7 +198,7 @@ class GfxMgr:
 				text = self.font.render(asciiChar, 1, (
 						redVal, greenVal, blueVal)) 
 				# textpos is x,y in pixels i think
-				# FIXME: not sure if FONT_SIZE works for height.  we'll see! 
+				# NOTE: the font width is a lil flexible because of AA 
 				textpos = (j * GfxMgr.FONT_WIDTH, i * GfxMgr.FONT_SIZE) 
 				self.background.blit(text, textpos)
 
