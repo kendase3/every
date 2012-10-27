@@ -17,7 +17,7 @@ from screen import Screen
 from asciipixel import AsciiPixel
 
 class GfxMgr:
-	WIGGLE_ROOM_WIDTH = 70 
+	WIGGLE_ROOM_WIDTH = 30 
 	WIGGLE_ROOM_HEIGHT = 100 
 	FONT_RATIO = 7.0 / 5.0 # ratio of font height / width 
 	#FONT_SIZE = 14 # i.e. font height 

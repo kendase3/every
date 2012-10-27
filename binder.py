@@ -11,6 +11,7 @@ import sys
 #sys.path.insert(0, os.path.join("..", "tag")) 
 #sys.path.insert(0, os.path.join("..", "..", "ingress")) 
 sys.path.insert(0, os.path.join("..", "..", "pop")) 
+#sys.path.insert(0, os.path.join("..", "..", "hessvgoblins")) 
 # ~~~~~
 
 # ~~~~~
@@ -19,4 +20,5 @@ sys.path.insert(0, os.path.join("..", "..", "pop"))
 #from tag import Board  
 #from battletyme import Arena
 from pop import GameMgr 
+#from hess import GameMgr
 # ~~~~~
