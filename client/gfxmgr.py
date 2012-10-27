@@ -11,7 +11,7 @@
 
 import pygame
 from pygame.locals import *
-import sys, os, time 
+import sys, os 
 from stevent import Stevent
 from screen import Screen
 from asciipixel import AsciiPixel
@@ -56,8 +56,8 @@ class GfxMgr:
 		# whether or not shift is pressed 
 		self.shift = False
 
-		#TEMP
-		self.fpsItr = 0
+		# whether or not the screen has new something worth showing
+		self.needBlit = True
 
 	def updateWindowDimensions(self, numChars, numLines):
 		self.numChars = numChars
@@ -151,27 +151,19 @@ class GfxMgr:
 		self.background.fill((0, 0, 0)) 
 
 	def blit(self):
-		startTime = time.time()
-		self.clearScreen()
 		self.blitNetScreen()
-
-		# brand new!
-		# brand dumb more like
-		#self.background = self.background.convert()
 
 		self.screen.blit(self.background, (0, 0))
 		pygame.display.flip()
 
-		if self.fpsItr == 10:
-			endTime = time.time()
-			print "FPS = %E" % (1 / (endTime - startTime))
-			self.fpsItr = 0
-		else:
-			self.fpsItr += 1
-
 	def blitNetScreen(self):
+		if self.needBlit == False:
+			return
+		# but if we do need a blit, get rid of that crap!
+		self.clearScreen()
 		if self.netScreen == None:
 			self.blitDefaultScreen()
+			self.needBlit = False
 			return
 		# we check to see if we need to resize the window
 		if len(self.netScreen.screen) != self.numLines and (
@@ -201,6 +193,7 @@ class GfxMgr:
 				# NOTE: the font width is a lil flexible because of AA 
 				textpos = (j * GfxMgr.FONT_WIDTH, i * GfxMgr.FONT_SIZE) 
 				self.background.blit(text, textpos)
+		self.needBlit = False
 
 	def blitDefaultScreen(self):
 		words = "Retrieving initial screen..."
@@ -297,7 +290,8 @@ class GfxMgr:
 
 	def updateScreen(self, netScreen):
 		self.netScreen = netScreen
-		# then blit it
+		# then say we need a fresh blit 
+		self.needBlit = True
 
 	def cleanup(self):
 		pygame.quit()
