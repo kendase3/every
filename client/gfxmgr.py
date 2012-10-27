@@ -19,14 +19,15 @@ from asciipixel import AsciiPixel
 class GfxMgr:
 	WIGGLE_ROOM_WIDTH = 70 
 	WIGGLE_ROOM_HEIGHT = 100 
-	FONT_RATIO = 7.0 / 5.0 # ratio of font height / width
+	FONT_RATIO = 7.0 / 5.0 # ratio of font height / width 
 	#FONT_SIZE = 14 # i.e. font height 
-	FONT_SIZE = 30
 	FONT_FILE = "freemonobold.ttf"
 	DUMMY_CHAR = "~"
 	DUMMY_RED = 255
 	DUMMY_GREEN = 0
 	DUMMY_BLUE = 0
+	DEFAULT_NUM_CHARS = 80
+	DEFAULT_NUM_LINES = 20
 	
 	def __init__(self):
 		self.quit = False
@@ -34,16 +35,25 @@ class GfxMgr:
 		#init pygame
 		pygame.init()
 		info = pygame.display.Info()
-		winWidth = info.current_w - GfxMgr.WIGGLE_ROOM_WIDTH 
-		winHeight = info.current_h - GfxMgr.WIGGLE_ROOM_HEIGHT 
-		self.numLines = winHeight / GfxMgr.FONT_SIZE
-		self.fontWidth = int(GfxMgr.FONT_SIZE / GfxMgr.FONT_RATIO)
-		self.numChars = winWidth / self.fontWidth
+		#print "width=%d, height=%d" % (info.current_w, info.current_h)
+		self.winWidth = info.current_w - GfxMgr.WIGGLE_ROOM_WIDTH 
+		self.winHeight = info.current_h - GfxMgr.WIGGLE_ROOM_HEIGHT 
+		self.initialWinWidth = self.winWidth
+		self.initialWinHeight = self.winHeight
+		self.numChars = GfxMgr.DEFAULT_NUM_CHARS
+		self.numLines = GfxMgr.DEFAULT_NUM_LINES
+		self.fontWidth = self.winWidth / self.numChars
+		fontSize1 = int(self.fontWidth * GfxMgr.FONT_RATIO)
+		fontSize2 = self.winHeight / self.numLines
+		self.fontSize = min(fontSize1, fontSize2)
+		self.numLines = self.winHeight / self.fontSize 
+		self.numChars = self.winWidth / self.fontWidth
  
 		#TODO: numLines and numChars will be fixed
 
 		# screen is what gfxmgr calls the literal graphics context
-		self.screen = pygame.display.set_mode((winWidth, winHeight))
+		self.screen = pygame.display.set_mode(
+				(self.winWidth, self.winHeight))
 		# netScreen is what gfxmgr calls the 'screen' object
 		self.netScreen = None
 		pygame.display.set_caption('EveryClient') 
@@ -52,7 +62,7 @@ class GfxMgr:
 		if not pygame.font:
 			print "no font module?!  totally freaking out!"
 			sys.exit()
-		self.font = self.loadFont(GfxMgr.FONT_FILE, GfxMgr.FONT_SIZE) 
+		self.font = self.loadFont(GfxMgr.FONT_FILE, self.fontSize) 
 
 		# whether or not shift is pressed 
 		self.shift = False
@@ -63,9 +73,14 @@ class GfxMgr:
 	def updateWindowDimensions(self, numChars, numLines):
 		self.numChars = numChars
 		self.numLines = numLines
-		winWidth = self.fontWidth * numChars 
-		winHeight = GfxMgr.FONT_SIZE * numLines  
-		self.screen = pygame.display.set_mode((winWidth, winHeight))
+		self.fontWidth = self.initialWinWidth / numChars 
+		self.fontSize = self.initialWinHeight / numLines  
+		# we use the smaller of the two
+		self.fontWidth = int(min(self.fontWidth, self.fontSize / GfxMgr.FONT_RATIO))
+		self.fontSize = int(min(self.fontSize, self.fontWidth * GfxMgr.FONT_RATIO)) 
+		self.winWidth = self.fontWidth * numChars 
+		self.winHeight = self.fontSize * numLines  
+		self.screen = pygame.display.set_mode((self.winWidth, self.winHeight))
 
 	def doQuit(self): 
 		print "gfxmgr noticed it was quitting time!"
@@ -167,7 +182,7 @@ class GfxMgr:
 			self.needBlit = False
 			return
 		# we check to see if we need to resize the window
-		if len(self.netScreen.screen) != self.numLines and (
+		if len(self.netScreen.screen) != self.numLines or (
 				len(self.netScreen.screen[0]) != self.numChars):
 			# then we require a window resize 
 			newNumLines = len(self.netScreen.screen) 
@@ -192,7 +207,7 @@ class GfxMgr:
 						redVal, greenVal, blueVal)) 
 				# textpos is x,y in pixels i think
 				# NOTE: the font width is a lil flexible because of AA 
-				textpos = (j * self.fontWidth, i * GfxMgr.FONT_SIZE) 
+				textpos = (j * self.fontWidth, i * self.fontSize) 
 				self.background.blit(text, textpos)
 		self.needBlit = False
 
@@ -217,7 +232,6 @@ class GfxMgr:
 
 	def iterate(self):
 		self.checkInput()
-		#print "blitting this screen: \n" + repr(self.netScreen)
 		self.blit()
 
 	def hasEvents(self):
