@@ -22,7 +22,7 @@ class Game:
 
 	# including player quit events
 	@abc.abstractmethod
-	def handleInput(self, stevent, playerIndex):
+	def handleInput(self, stevent, playerNumber):
 		return
 
 	@abc.abstractmethod

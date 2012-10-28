@@ -9,7 +9,7 @@ import sys
 ### SET THE PATH TO YOUR GAME FOLDER HERE
 # sys.path.insert(0, os.path.join("path", "to", "your", "folder")
 #sys.path.insert(0, os.path.join("..", "tag")) 
-#sys.path.insert(0, os.path.join("..", "..", "ingress")) 
+#sys.path.insert(0, os.path.join("..", "..", "battletyme")) 
 sys.path.insert(0, os.path.join("..", "..", "pop")) 
 #sys.path.insert(0, os.path.join("..", "..", "hessvgoblins")) 
 # ~~~~~

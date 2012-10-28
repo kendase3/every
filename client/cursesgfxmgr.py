@@ -18,6 +18,25 @@ class CursesGfxMgr(IGfxMgr):
 	GREEN_PAIR = 4
 	MAGENTA_PAIR = 5
 	CYAN_PAIR = 6
+	RED_WHITE_PAIR = 7
+	BLUE_WHITE_PAIR = 8 
+	YELLOW_WHITE_PAIR = 9 
+	GREEN_WHITE_PAIR = 10 
+	MAGENTA_WHITE_PAIR = 11 
+	CYAN_WHITE_PAIR = 12 
+	BLACK_WHITE_PAIR = 13
+	BLUE_RED_PAIR = 14 
+	YELLOW_RED_PAIR = 15 
+	GREEN_RED_PAIR = 16 
+	MAGENTA_RED_PAIR = 17 
+	CYAN_RED_PAIR = 18 
+	BLACK_RED_PAIR = 19
+	RED_BLUE_PAIR = 20 
+	YELLOW_RED_PAIR = 21 
+	GREEN_RED_PAIR = 22 
+	MAGENTA_RED_PAIR = 23 
+	CYAN_RED_PAIR = 24 
+	BLACK_RED_PAIR = 25 
 	DUMMY_CHAR = '~'
 	DUMMY_COLOR = RED_PAIR
 	def __init__(self): 
@@ -32,6 +51,7 @@ class CursesGfxMgr(IGfxMgr):
 		self.cursesScreen.keypad(1)
 		# set custom tenths of a second to wait before giving up on waiting for input
 		curses.start_color() 
+		#curses.use_default_colors()
 		#curses.halfdelay(5)
 		self.cursesScreen.nodelay(1)
 		curses.init_pair(1, curses.COLOR_RED, curses.COLOR_BLACK) 
@@ -40,6 +60,31 @@ class CursesGfxMgr(IGfxMgr):
 		curses.init_pair(4, curses.COLOR_GREEN, curses.COLOR_BLACK) 
 		curses.init_pair(5, curses.COLOR_MAGENTA, curses.COLOR_BLACK) 
 		curses.init_pair(6, curses.COLOR_CYAN, curses.COLOR_BLACK) 
+		curses.init_pair(7, curses.COLOR_RED, curses.COLOR_WHITE) 
+		curses.init_pair(8, curses.COLOR_BLUE, curses.COLOR_WHITE) 
+		curses.init_pair(9, curses.COLOR_YELLOW, curses.COLOR_WHITE) 
+		curses.init_pair(10, curses.COLOR_GREEN, curses.COLOR_WHITE) 
+		curses.init_pair(11, curses.COLOR_MAGENTA, curses.COLOR_WHITE) 
+		curses.init_pair(12, curses.COLOR_CYAN, curses.COLOR_WHITE) 
+		curses.init_pair(13, curses.COLOR_BLACK, curses.COLOR_WHITE) 
+		curses.init_pair(14, curses.COLOR_BLUE, curses.COLOR_RED) 
+		curses.init_pair(15, curses.COLOR_YELLOW, curses.COLOR_RED) 
+		curses.init_pair(16, curses.COLOR_GREEN, curses.COLOR_RED) 
+		curses.init_pair(17, curses.COLOR_MAGENTA, curses.COLOR_RED) 
+		curses.init_pair(18, curses.COLOR_CYAN, curses.COLOR_RED) 
+		curses.init_pair(19, curses.COLOR_BLACK, curses.COLOR_RED) 
+		curses.init_pair(20, curses.COLOR_RED, curses.COLOR_BLUE) 
+		curses.init_pair(21, curses.COLOR_YELLOW, curses.COLOR_BLUE) 
+		curses.init_pair(22, curses.COLOR_GREEN, curses.COLOR_BLUE) 
+		curses.init_pair(23, curses.COLOR_MAGENTA, curses.COLOR_BLUE) 
+		curses.init_pair(24, curses.COLOR_CYAN, curses.COLOR_BLUE) 
+		curses.init_pair(25, curses.COLOR_BLACK, curses.COLOR_BLUE) 
+		curses.init_pair(26, curses.COLOR_RED, curses.COLOR_YELLOW) 
+		curses.init_pair(27, curses.COLOR_BLUE, curses.COLOR_YELLOW) 
+		curses.init_pair(28, curses.COLOR_GREEN, curses.COLOR_YELLOW) 
+		curses.init_pair(29, curses.COLOR_MAGENTA, curses.COLOR_YELLOW) 
+		curses.init_pair(30, curses.COLOR_CYAN, curses.COLOR_YELLOW) 
+		curses.init_pair(31, curses.COLOR_BLACK, curses.COLOR_YELLOW) 
 	
 	def updateWindowDimensions(self, numChars, numLines):
 		IGfxMgr.updateWindowDimensions(self, numChars, numLines)
@@ -187,7 +232,8 @@ def respondToInput(screen):
 		screen.addstr(3, 0, "yussss", curses.color_pair(3))
 		return True
 	elif c == ord('n'):
-		screen.addstr(3, 0, "awww", curses.color_pair(1))
+		# mabe i need to turn somethign on or off like bold etc.
+		screen.addstr(3, 0, "awww", curses.color_pair(4))
 		return True
 	elif c == ord('q'):
 		return False
@@ -216,6 +262,7 @@ def hello(screen):
 	curses.init_pair(1, curses.COLOR_RED, curses.COLOR_BLACK) 
 	curses.init_pair(2, curses.COLOR_BLUE, curses.COLOR_BLACK) 
 	curses.init_pair(3, curses.COLOR_YELLOW, curses.COLOR_BLACK) 
+	curses.init_pair(4, curses.COLOR_RED, curses.COLOR_WHITE) 
 	screen.addstr(1, 0, '@', curses.color_pair(2)) 
 	screen.addstr(2, 0, '@', curses.color_pair(3)) 
 	#if curses.has_colors():
