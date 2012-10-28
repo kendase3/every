@@ -24,7 +24,7 @@ class AsciiPixel:
 	CYAN = 7, 'cyan', 0, 255, 255 
 	COLORS.append(CYAN)
 	def __init__(self, ascii=DEFAULT_ASCII, 
-				color=WHITE):
+				color=WHITE, bgColor=BLACK):
 		if isinstance(ascii, int): 
 			self.ascii = ascii
 		else:
@@ -63,6 +63,20 @@ class AsciiPixel:
 	
 	def getBlue(self):
 		return self.color[4]
+
+	#TODO: use
+	def getColorCode(fg, bg=None):
+		if bg == None:
+			bg = self.getColorIndex('BLACK') 
+		return fg * 2**3 + bg
+
+	#TODO: use
+	def getColors(colorCode):
+		fg = colorCode / 8
+		bg = colorCode % 8
+		return fg, bg
+			
+	def updateWindowDimensions(self, numChars, numLines):
 
 if __name__=="__main__":
 	"""

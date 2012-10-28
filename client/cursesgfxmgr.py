@@ -12,33 +12,11 @@ from screen import Screen
 from asciipixel import AsciiPixel
 
 class CursesGfxMgr(IGfxMgr):
-	RED_PAIR = 1
-	BLUE_PAIR = 2 
-	YELLOW_PAIR = 3
-	GREEN_PAIR = 4
-	MAGENTA_PAIR = 5
-	CYAN_PAIR = 6
-	RED_WHITE_PAIR = 7
-	BLUE_WHITE_PAIR = 8 
-	YELLOW_WHITE_PAIR = 9 
-	GREEN_WHITE_PAIR = 10 
-	MAGENTA_WHITE_PAIR = 11 
-	CYAN_WHITE_PAIR = 12 
-	BLACK_WHITE_PAIR = 13
-	BLUE_RED_PAIR = 14 
-	YELLOW_RED_PAIR = 15 
-	GREEN_RED_PAIR = 16 
-	MAGENTA_RED_PAIR = 17 
-	CYAN_RED_PAIR = 18 
-	BLACK_RED_PAIR = 19
-	RED_BLUE_PAIR = 20 
-	YELLOW_RED_PAIR = 21 
-	GREEN_RED_PAIR = 22 
-	MAGENTA_RED_PAIR = 23 
-	CYAN_RED_PAIR = 24 
-	BLACK_RED_PAIR = 25 
+	COLORS = (
+		['WHITE', 'BLACK', 'RED', 'BLUE', 'YELLOW', 'GREEN', 'MAGENTA', 'CYAN'])
 	DUMMY_CHAR = '~'
-	DUMMY_COLOR = RED_PAIR
+	DUMMY_COLOR = RED
+
 	def __init__(self): 
 		IGfxMgr.__init__(self) 	
 		self.screenChanged = True
@@ -54,38 +32,55 @@ class CursesGfxMgr(IGfxMgr):
 		#curses.use_default_colors()
 		#curses.halfdelay(5)
 		self.cursesScreen.nodelay(1)
-		curses.init_pair(1, curses.COLOR_RED, curses.COLOR_BLACK) 
-		curses.init_pair(2, curses.COLOR_BLUE, curses.COLOR_BLACK) 
-		curses.init_pair(3, curses.COLOR_YELLOW, curses.COLOR_BLACK) 
-		curses.init_pair(4, curses.COLOR_GREEN, curses.COLOR_BLACK) 
-		curses.init_pair(5, curses.COLOR_MAGENTA, curses.COLOR_BLACK) 
-		curses.init_pair(6, curses.COLOR_CYAN, curses.COLOR_BLACK) 
-		curses.init_pair(7, curses.COLOR_RED, curses.COLOR_WHITE) 
-		curses.init_pair(8, curses.COLOR_BLUE, curses.COLOR_WHITE) 
-		curses.init_pair(9, curses.COLOR_YELLOW, curses.COLOR_WHITE) 
-		curses.init_pair(10, curses.COLOR_GREEN, curses.COLOR_WHITE) 
-		curses.init_pair(11, curses.COLOR_MAGENTA, curses.COLOR_WHITE) 
-		curses.init_pair(12, curses.COLOR_CYAN, curses.COLOR_WHITE) 
-		curses.init_pair(13, curses.COLOR_BLACK, curses.COLOR_WHITE) 
-		curses.init_pair(14, curses.COLOR_BLUE, curses.COLOR_RED) 
-		curses.init_pair(15, curses.COLOR_YELLOW, curses.COLOR_RED) 
-		curses.init_pair(16, curses.COLOR_GREEN, curses.COLOR_RED) 
-		curses.init_pair(17, curses.COLOR_MAGENTA, curses.COLOR_RED) 
-		curses.init_pair(18, curses.COLOR_CYAN, curses.COLOR_RED) 
-		curses.init_pair(19, curses.COLOR_BLACK, curses.COLOR_RED) 
-		curses.init_pair(20, curses.COLOR_RED, curses.COLOR_BLUE) 
-		curses.init_pair(21, curses.COLOR_YELLOW, curses.COLOR_BLUE) 
-		curses.init_pair(22, curses.COLOR_GREEN, curses.COLOR_BLUE) 
-		curses.init_pair(23, curses.COLOR_MAGENTA, curses.COLOR_BLUE) 
-		curses.init_pair(24, curses.COLOR_CYAN, curses.COLOR_BLUE) 
-		curses.init_pair(25, curses.COLOR_BLACK, curses.COLOR_BLUE) 
-		curses.init_pair(26, curses.COLOR_RED, curses.COLOR_YELLOW) 
-		curses.init_pair(27, curses.COLOR_BLUE, curses.COLOR_YELLOW) 
-		curses.init_pair(28, curses.COLOR_GREEN, curses.COLOR_YELLOW) 
-		curses.init_pair(29, curses.COLOR_MAGENTA, curses.COLOR_YELLOW) 
-		curses.init_pair(30, curses.COLOR_CYAN, curses.COLOR_YELLOW) 
-		curses.init_pair(31, curses.COLOR_BLACK, curses.COLOR_YELLOW) 
+		for i, bgColor in enumerate(CursesGfxMgr.COLORS):
+			for j, fgColor in enumerate(CursesGfxMgr.COLORS):
+				code = self.getColorCode(j, i)
+				curses.init_pair(1, curses.COLOR_RED, curses.COLOR_BLACK) 
 	
+	def getCursesColor(colorStr):
+		if colorStr == 'white':
+			return curses.COLOR_WHITE
+		elif colorStr == 'black':
+			return curses.COLOR_BLACK
+		elif colorStr == 'red':
+			return curses.COLOR_RED
+		elif colorStr == 'blue':
+			return curses.COLOR_BLUE
+		elif colorStr == 'yellow':
+			return curses.COLOR_YELLOW
+		elif colorStr == 'green':
+			return curses.COLOR_GREEN
+		elif colorStr == 'magenta':
+			return curses.COLOR_MAGENTA
+		elif colorStr == 'cyan':
+			return curses.COLOR_CYAN
+		else: # explode
+			print "ERROR: UNKNOWN COLOR!  HAVE A NICE DAY"
+			return None
+
+	"""
+	def getColorIndex(colorStr):
+		if colorStr not in CursesGfxMgr.COLORS:
+			"ERROR: COLOR %s NOT IN COLORS.  HAVE A NICE DAY." % colorStr 
+			return None
+		else:
+			return CursesGfxMgr.COLORS.index(colorStr)
+	"""
+
+	def getColorCode(fg, bg=None):
+		if bg == None:
+			bg = self.getColorIndex('BLACK') 
+		if isinstance(fg, str):
+			fg = self.getColorIndex(fg)
+		if isinstance(bg, str):
+			bg = self.getColorIndex(bg) 
+		return fg * 2**3 + bg
+
+	def getColors(colorCode):
+		fg = colorCode / 8
+		bg = colorCode % 8
+		return fg, bg
+			
 	def updateWindowDimensions(self, numChars, numLines):
 		IGfxMgr.updateWindowDimensions(self, numChars, numLines)
 
@@ -171,6 +166,7 @@ class CursesGfxMgr(IGfxMgr):
 					colorPair = CursesGfxMgr.DUMMY_COLOR
 				else:
 					asciiChar = chr(asciiPixel.ascii)
+					#FIXME: tsk tsk tsk.  manual iteration?
 					if asciiPixel.color == AsciiPixel.BLUE:
 						# then we set the color to blue
 						colorPair = CursesGfxMgr.BLUE_PAIR

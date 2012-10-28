@@ -8,7 +8,9 @@ GREEN = 4
 MAGENTA = 5
 CYAN = 6
 
-def getColorCode(fg, bg):
+def getColorCode(fg, bg=None):
+	if bg == None:
+		bg = BLACK
 	return fg * 2**3 + bg
 
 def getColors(colorCode):
