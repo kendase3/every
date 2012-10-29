@@ -120,9 +120,10 @@ def byte(screen):
 	msg = bytearray() 
 	msg.extend(struct.pack("BB", screen.height, screen.width))  
 	for row in screen.screen:
-		for asciipixel in row:
+		for asciiPixel in row:
 			msg.extend(struct.pack(
-					"BB", asciipixel.ascii, asciipixel.color[0])) 
+					"BB", asciiPixel.ascii, AsciiPixel.getColorCode(
+							asciiPixel.color[0], asciiPixel.bgColor[0]))) 
 	return msg
 
 def unbyte(screenBytes): 

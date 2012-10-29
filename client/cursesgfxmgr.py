@@ -12,10 +12,8 @@ from screen import Screen
 from asciipixel import AsciiPixel
 
 class CursesGfxMgr(IGfxMgr):
-	COLORS = (
-		['WHITE', 'BLACK', 'RED', 'BLUE', 'YELLOW', 'GREEN', 'MAGENTA', 'CYAN'])
 	DUMMY_CHAR = '~'
-	DUMMY_COLOR = RED
+	DUMMY_COLOR = AsciiPixel.RED[0] 
 
 	def __init__(self): 
 		IGfxMgr.__init__(self) 	
@@ -27,60 +25,43 @@ class CursesGfxMgr(IGfxMgr):
 		curses.noecho()
 		curses.cbreak()
 		self.cursesScreen.keypad(1)
-		# set custom tenths of a second to wait before giving up on waiting for input
 		curses.start_color() 
-		#curses.use_default_colors()
-		#curses.halfdelay(5)
 		self.cursesScreen.nodelay(1)
-		for i, bgColor in enumerate(CursesGfxMgr.COLORS):
-			for j, fgColor in enumerate(CursesGfxMgr.COLORS):
-				code = self.getColorCode(j, i)
-				curses.init_pair(1, curses.COLOR_RED, curses.COLOR_BLACK) 
-	
-	def getCursesColor(colorStr):
-		if colorStr == 'white':
+		fil = open('debug', 'w')
+		for bgColor in AsciiPixel.COLORS:
+			for fgColor in AsciiPixel.COLORS:
+				code = self.getColorCode(fgColor[0], bgColor[0])
+				fgCursesColor = self.getCursesColor(fgColor[0])
+				bgCursesColor = self.getCursesColor(bgColor[0])
+				fil.write("code=%d,fg=%d,bg=%d" % (
+						code, fgColor[0], bgColor[0]))
+				curses.init_pair(code, fgCursesColor, bgCursesColor) 
+		fil.close()
+
+	def getCursesColor(self, colorIndex):
+		if colorIndex == AsciiPixel.WHITE[0]:
 			return curses.COLOR_WHITE
-		elif colorStr == 'black':
+		elif colorIndex == AsciiPixel.BLACK[0]:
 			return curses.COLOR_BLACK
-		elif colorStr == 'red':
+		elif colorIndex == AsciiPixel.RED[0]:
 			return curses.COLOR_RED
-		elif colorStr == 'blue':
+		elif colorIndex == AsciiPixel.BLUE[0]:
 			return curses.COLOR_BLUE
-		elif colorStr == 'yellow':
+		elif colorIndex == AsciiPixel.YELLOW[0]:
 			return curses.COLOR_YELLOW
-		elif colorStr == 'green':
+		elif colorIndex == AsciiPixel.GREEN[0]:
 			return curses.COLOR_GREEN
-		elif colorStr == 'magenta':
+		elif colorIndex == AsciiPixel.MAGENTA[0]:
 			return curses.COLOR_MAGENTA
-		elif colorStr == 'cyan':
+		elif colorIndex == AsciiPixel.CYAN[0]:
 			return curses.COLOR_CYAN
 		else: # explode
 			print "ERROR: UNKNOWN COLOR!  HAVE A NICE DAY"
 			return None
 
-	"""
-	def getColorIndex(colorStr):
-		if colorStr not in CursesGfxMgr.COLORS:
-			"ERROR: COLOR %s NOT IN COLORS.  HAVE A NICE DAY." % colorStr 
-			return None
-		else:
-			return CursesGfxMgr.COLORS.index(colorStr)
-	"""
+	def getColorCode(self, fg, bg=None):
+		return AsciiPixel.getColorCode(fg, bg) + 1 
 
-	def getColorCode(fg, bg=None):
-		if bg == None:
-			bg = self.getColorIndex('BLACK') 
-		if isinstance(fg, str):
-			fg = self.getColorIndex(fg)
-		if isinstance(bg, str):
-			bg = self.getColorIndex(bg) 
-		return fg * 2**3 + bg
-
-	def getColors(colorCode):
-		fg = colorCode / 8
-		bg = colorCode % 8
-		return fg, bg
-			
 	def updateWindowDimensions(self, numChars, numLines):
 		IGfxMgr.updateWindowDimensions(self, numChars, numLines)
 
@@ -166,24 +147,9 @@ class CursesGfxMgr(IGfxMgr):
 					colorPair = CursesGfxMgr.DUMMY_COLOR
 				else:
 					asciiChar = chr(asciiPixel.ascii)
-					#FIXME: tsk tsk tsk.  manual iteration?
-					if asciiPixel.color == AsciiPixel.BLUE:
-						# then we set the color to blue
-						colorPair = CursesGfxMgr.BLUE_PAIR
-					elif asciiPixel.color == AsciiPixel.RED:
-						# you get the idea
-						colorPair = CursesGfxMgr.RED_PAIR
-					elif asciiPixel.color == AsciiPixel.YELLOW:
-						colorPair = CursesGfxMgr.YELLOW_PAIR
-					elif asciiPixel.color == AsciiPixel.GREEN:
-						colorPair = CursesGfxMgr.GREEN_PAIR
-					elif asciiPixel.color == AsciiPixel.MAGENTA:
-						colorPair = CursesGfxMgr.MAGENTA_PAIR
-					elif asciiPixel.color == AsciiPixel.CYAN:
-						colorPair = CursesGfxMgr.CYAN_PAIR 
-					else:
-						# if it's unknown, we just assume white
-						colorNum = 0
+					#FIXME -SEK 
+					colorPair = AsciiPixel.getColors(asciiPixel.getColorCode())
+					#end
 				self.cursesScreen.addstr(i, j, asciiChar, curses.color_pair(colorPair))
 		self.screenChanged = False
 		return
