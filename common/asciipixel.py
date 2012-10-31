@@ -19,24 +19,29 @@ class AsciiPixel:
 	COLORS.append(BLUE)
 	YELLOW = 5, 'yellow', 255, 255, 0
 	COLORS.append(YELLOW)
-	MAGENTA = 6, 'magenta', 255, 0, 255 #TODO: ? 
+	MAGENTA = 6, 'magenta', 255, 0, 255 
 	COLORS.append(MAGENTA)
 	CYAN = 7, 'cyan', 0, 255, 255 
 	COLORS.append(CYAN)
 	def __init__(self, ascii=DEFAULT_ASCII, 
-				color=WHITE):
+				color=WHITE, bgColor=BLACK):
 		if isinstance(ascii, int): 
 			self.ascii = ascii
 		else:
 			self.ascii = ord(ascii) 
 		# this lookup does add in some overhead every asciiPixel render
 		if isinstance(color, int):
+			fg, bg = AsciiPixel.getColors(color) 
 			for curColor in AsciiPixel.COLORS:
-				if curColor[0] == color:
+				if curColor[0] == fg:
 					self.color = curColor
+			for curColor in AsciiPixel.COLORS:
+				if curColor[0] == bg:
+					self.bgColor = curColor
 		else:
 			# we assume it's a full color list
 			self.color = color
+			self.bgColor = bgColor
 	
 	def __repr__(self):
 		if self.ascii == AsciiPixel.DUMMY:
@@ -63,6 +68,16 @@ class AsciiPixel:
 	
 	def getBlue(self):
 		return self.color[4]
+
+	@staticmethod
+	def getColorCode(fgColor, bgColor):
+		return bgColor * 2**3 + fgColor 
+
+	@staticmethod 
+	def getColors(colorCode):
+		bg = colorCode / 8
+		fg = colorCode % 8
+		return fg, bg
 
 if __name__=="__main__":
 	"""

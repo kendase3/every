@@ -167,10 +167,21 @@ class GfxMgr:
 		self.background = self.background.convert()
 		self.background.fill((0, 0, 0)) 
 
+	def getDirtyRects(self):
+		#TODO: implement
+		if self.oldScreen == None:
+			return 'all'
+		for i in range(0, self.netScreen.height):
+			for j in range(0, self.netScreen.width):
+				pass
+					
+
 	def blit(self):
 		self.blitNetScreen()
 
 		self.screen.blit(self.background, (0, 0))
+		#TODO: dirty rects only
+		#pygame.display.update(rectList)
 		pygame.display.flip()
 
 	def blitNetScreen(self):
@@ -179,6 +190,7 @@ class GfxMgr:
 		# but if we do need a blit, get rid of that crap!
 		self.clearScreen()
 		if self.netScreen == None:
+			#self.clearScreen()
 			self.blitDefaultScreen()
 			self.needBlit = False
 			return
@@ -190,9 +202,11 @@ class GfxMgr:
 			newNumChars = len(self.netScreen.screen[0])  
 			self.updateWindowDimensions(newNumChars, newNumLines)
 		#TODO: make a list of dirty lines and only update them  
-		for i in range(0, self.netScreen.height):
-			for j in range(0, self.netScreen.width): 
-				asciiPixel = self.netScreen.screen[i][j] 
+		#rectList = self.getDirtyRects()
+		#FIXME: wtf steve: i, j loop is so slow
+		for i, row in enumerate(self.netScreen.screen): 
+			for j, asciiPixel in enumerate(row): 
+				#asciiPixel = self.netScreen.screen[i][j] 
 				# it's GfxMgr's job to decide how dummy pixels are rendered
 				if asciiPixel.ascii == AsciiPixel.DUMMY:
 					asciiChar = GfxMgr.DUMMY_CHAR
@@ -305,6 +319,7 @@ class GfxMgr:
 				return key
 
 	def updateScreen(self, netScreen):
+		self.oldScreen = self.netScreen
 		self.netScreen = netScreen
 		# then say we need a fresh blit 
 		self.needBlit = True

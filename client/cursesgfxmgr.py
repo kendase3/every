@@ -12,14 +12,9 @@ from screen import Screen
 from asciipixel import AsciiPixel
 
 class CursesGfxMgr(IGfxMgr):
-	RED_PAIR = 1
-	BLUE_PAIR = 2 
-	YELLOW_PAIR = 3
-	GREEN_PAIR = 4
-	MAGENTA_PAIR = 5
-	CYAN_PAIR = 6
 	DUMMY_CHAR = '~'
-	DUMMY_COLOR = RED_PAIR
+	DUMMY_COLOR = AsciiPixel.RED[0] 
+
 	def __init__(self): 
 		IGfxMgr.__init__(self) 	
 		self.screenChanged = True
@@ -30,17 +25,43 @@ class CursesGfxMgr(IGfxMgr):
 		curses.noecho()
 		curses.cbreak()
 		self.cursesScreen.keypad(1)
-		# set custom tenths of a second to wait before giving up on waiting for input
 		curses.start_color() 
-		#curses.halfdelay(5)
 		self.cursesScreen.nodelay(1)
-		curses.init_pair(1, curses.COLOR_RED, curses.COLOR_BLACK) 
-		curses.init_pair(2, curses.COLOR_BLUE, curses.COLOR_BLACK) 
-		curses.init_pair(3, curses.COLOR_YELLOW, curses.COLOR_BLACK) 
-		curses.init_pair(4, curses.COLOR_GREEN, curses.COLOR_BLACK) 
-		curses.init_pair(5, curses.COLOR_MAGENTA, curses.COLOR_BLACK) 
-		curses.init_pair(6, curses.COLOR_CYAN, curses.COLOR_BLACK) 
-	
+		fil = open('debug', 'w')
+		for bgColor in AsciiPixel.COLORS:
+			for fgColor in AsciiPixel.COLORS:
+				code = self.getColorCode(fgColor[0], bgColor[0])
+				fgCursesColor = self.getCursesColor(fgColor[0])
+				bgCursesColor = self.getCursesColor(bgColor[0])
+				fil.write("code=%d,fg=%d,bg=%d" % (
+						code, fgColor[0], bgColor[0]))
+				curses.init_pair(code, fgCursesColor, bgCursesColor) 
+		fil.close()
+
+	def getCursesColor(self, colorIndex):
+		if colorIndex == AsciiPixel.WHITE[0]:
+			return curses.COLOR_WHITE
+		elif colorIndex == AsciiPixel.BLACK[0]:
+			return curses.COLOR_BLACK
+		elif colorIndex == AsciiPixel.RED[0]:
+			return curses.COLOR_RED
+		elif colorIndex == AsciiPixel.BLUE[0]:
+			return curses.COLOR_BLUE
+		elif colorIndex == AsciiPixel.YELLOW[0]:
+			return curses.COLOR_YELLOW
+		elif colorIndex == AsciiPixel.GREEN[0]:
+			return curses.COLOR_GREEN
+		elif colorIndex == AsciiPixel.MAGENTA[0]:
+			return curses.COLOR_MAGENTA
+		elif colorIndex == AsciiPixel.CYAN[0]:
+			return curses.COLOR_CYAN
+		else: # explode
+			print "ERROR: UNKNOWN COLOR!  HAVE A NICE DAY"
+			return None
+
+	def getColorCode(self, fg, bg=None):
+		return AsciiPixel.getColorCode(fg, bg) + 1 
+
 	def updateWindowDimensions(self, numChars, numLines):
 		IGfxMgr.updateWindowDimensions(self, numChars, numLines)
 
@@ -126,23 +147,9 @@ class CursesGfxMgr(IGfxMgr):
 					colorPair = CursesGfxMgr.DUMMY_COLOR
 				else:
 					asciiChar = chr(asciiPixel.ascii)
-					if asciiPixel.color == AsciiPixel.BLUE:
-						# then we set the color to blue
-						colorPair = CursesGfxMgr.BLUE_PAIR
-					elif asciiPixel.color == AsciiPixel.RED:
-						# you get the idea
-						colorPair = CursesGfxMgr.RED_PAIR
-					elif asciiPixel.color == AsciiPixel.YELLOW:
-						colorPair = CursesGfxMgr.YELLOW_PAIR
-					elif asciiPixel.color == AsciiPixel.GREEN:
-						colorPair = CursesGfxMgr.GREEN_PAIR
-					elif asciiPixel.color == AsciiPixel.MAGENTA:
-						colorPair = CursesGfxMgr.MAGENTA_PAIR
-					elif asciiPixel.color == AsciiPixel.CYAN:
-						colorPair = CursesGfxMgr.CYAN_PAIR 
-					else:
-						# if it's unknown, we just assume white
-						colorNum = 0
+					#FIXME -SEK 
+					colorPair = AsciiPixel.getColors(asciiPixel.getColorCode())
+					#end
 				self.cursesScreen.addstr(i, j, asciiChar, curses.color_pair(colorPair))
 		self.screenChanged = False
 		return
@@ -187,7 +194,8 @@ def respondToInput(screen):
 		screen.addstr(3, 0, "yussss", curses.color_pair(3))
 		return True
 	elif c == ord('n'):
-		screen.addstr(3, 0, "awww", curses.color_pair(1))
+		# mabe i need to turn somethign on or off like bold etc.
+		screen.addstr(3, 0, "awww", curses.color_pair(4))
 		return True
 	elif c == ord('q'):
 		return False
@@ -216,6 +224,7 @@ def hello(screen):
 	curses.init_pair(1, curses.COLOR_RED, curses.COLOR_BLACK) 
 	curses.init_pair(2, curses.COLOR_BLUE, curses.COLOR_BLACK) 
 	curses.init_pair(3, curses.COLOR_YELLOW, curses.COLOR_BLACK) 
+	curses.init_pair(4, curses.COLOR_RED, curses.COLOR_WHITE) 
 	screen.addstr(1, 0, '@', curses.color_pair(2)) 
 	screen.addstr(2, 0, '@', curses.color_pair(3)) 
 	#if curses.has_colors():
