@@ -148,7 +148,7 @@ class CursesGfxMgr(IGfxMgr):
 				else:
 					asciiChar = chr(asciiPixel.ascii)
 					#FIXME -SEK 
-					colorPair = AsciiPixel.getColors(asciiPixel.getColorCode())
+					colorPair = AsciiPixel.getColorCode(asciiPixel.color[0], asciiPixel.bgColor[0])
 					#end
 				self.cursesScreen.addstr(i, j, asciiChar, curses.color_pair(colorPair))
 		self.screenChanged = False
