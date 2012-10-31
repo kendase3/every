@@ -30,7 +30,7 @@ class CursesGfxMgr(IGfxMgr):
 		fil = open('debug', 'w')
 		for bgColor in AsciiPixel.COLORS:
 			for fgColor in AsciiPixel.COLORS:
-				code = self.getColorCode(fgColor[0], bgColor[0])
+				code = CursesGfxMgr.getColorCode(fgColor[0], bgColor[0])
 				fgCursesColor = self.getCursesColor(fgColor[0])
 				bgCursesColor = self.getCursesColor(bgColor[0])
 				fil.write("code=%d,fg=%d,bg=%d" % (
@@ -59,7 +59,8 @@ class CursesGfxMgr(IGfxMgr):
 			print "ERROR: UNKNOWN COLOR!  HAVE A NICE DAY"
 			return None
 
-	def getColorCode(self, fg, bg=None):
+	@staticmethod
+	def getColorCode(fg, bg=None):
 		return AsciiPixel.getColorCode(fg, bg) + 1 
 
 	def updateWindowDimensions(self, numChars, numLines):
@@ -148,7 +149,7 @@ class CursesGfxMgr(IGfxMgr):
 				else:
 					asciiChar = chr(asciiPixel.ascii)
 					#FIXME -SEK 
-					colorPair = AsciiPixel.getColorCode(asciiPixel.color[0], asciiPixel.bgColor[0])
+					colorPair = CursesGfxMgr.getColorCode(asciiPixel.color[0], asciiPixel.bgColor[0])
 					#end
 				self.cursesScreen.addstr(i, j, asciiChar, curses.color_pair(colorPair))
 		self.screenChanged = False
