@@ -39,6 +39,9 @@ class CursesGfxMgr(IGfxMgr):
 		fil.close()
 
 	def getCursesColor(self, colorIndex):
+	"""
+		This method is still used to find the mappings of individual colors
+	"""
 		if colorIndex == AsciiPixel.WHITE[0]:
 			return curses.COLOR_WHITE
 		elif colorIndex == AsciiPixel.BLACK[0]:
@@ -61,6 +64,11 @@ class CursesGfxMgr(IGfxMgr):
 
 	@staticmethod
 	def getColorCode(fg, bg=None):
+		"""
+			This implementation differs from the AsciiPixel implementation
+			in that it adds 1.  This is necessary because color 0 is taken
+			in curses.
+		"""
 		return AsciiPixel.getColorCode(fg, bg) + 1 
 
 	def updateWindowDimensions(self, numChars, numLines):
@@ -126,6 +134,10 @@ class CursesGfxMgr(IGfxMgr):
 		return
 
 	def blitNetScreen(self):
+	"""
+		Does its own checking and safely reverts to a dummy screen	
+	"""
+		#TODO: selective updating i.e. get screen deltas and update dirty rects
 		if self.screenChanged == False:
 			return
 		if self.netScreen == None:
@@ -148,9 +160,7 @@ class CursesGfxMgr(IGfxMgr):
 					colorPair = CursesGfxMgr.DUMMY_COLOR
 				else:
 					asciiChar = chr(asciiPixel.ascii)
-					#FIXME -SEK 
 					colorPair = CursesGfxMgr.getColorCode(asciiPixel.color[0], asciiPixel.bgColor[0])
-					#end
 				self.cursesScreen.addstr(i, j, asciiChar, curses.color_pair(colorPair))
 		self.screenChanged = False
 		return

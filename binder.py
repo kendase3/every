@@ -11,7 +11,7 @@ import sys
 #sys.path.insert(0, os.path.join("..", "tag")) 
 #sys.path.insert(0, os.path.join("..", "..", "battletyme")) 
 sys.path.insert(0, os.path.join("..", "..", "pop")) 
-sys.path.insert(0, os.path.join("..", "..", "hess")) 
+#sys.path.insert(0, os.path.join("..", "..", "hess")) 
 # ~~~~~
 
 # ~~~~~
@@ -19,6 +19,6 @@ sys.path.insert(0, os.path.join("..", "..", "hess"))
 # (must subclass Game class as found in server/game.py) 
 #from tag import Board  
 #from battletyme import Arena
-#from pop import GameMgr 
-from hess import GameMgr
+from pop import GameMgr 
+#from hess import GameMgr
 # ~~~~~
