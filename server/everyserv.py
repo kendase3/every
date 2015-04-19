@@ -35,12 +35,12 @@ class IngressProtocol(basic.LineReceiver):
 	def __init__(self):
 		# one day things like this, for now, just spit a default screen to all
 		"""
-			self.player = Player(self.factory.game) 
-			self.factory.game.addPlayer(self.player)
+		self.player = Player(self.factory.game) 
+		self.factory.game.addPlayer(self.player)
 		"""
 	def connectionMade(self):
 		"""
-			Send MOTD, query a new user for their username
+		Send MOTD, query a new user for their username
 		"""
 		self.factory.addUser(self)
 		self.playerNum = self.factory.numPlayers
@@ -55,20 +55,10 @@ class IngressProtocol(basic.LineReceiver):
 
 	def packetize(self, curScreen):
 		"""
-			the only thing we send are screens.
+		the only thing we send are screens.
 		"""
 		# just assume it's a screen
 		ret = screen.byte(curScreen) 
-		"""
-		# use instanceof(), dude
-		if type(struct) == Screen:
-			print "this fires, dude"
-			ret = str(struct)
-		else:
-			#FIXME: type(struct) returns instance?!
-			print "type was %s" % type(struct)
-			ret = pickle.dumps(struct)
-		"""
 		return ret	
 
 	def depacketize(self, string):
@@ -77,12 +67,12 @@ class IngressProtocol(basic.LineReceiver):
 		
 	def lineReceived(self, line):
 		"""
-			it's a keypress or event of some kind from the client. 
-					really it's the game's responsibility.
-					we should pass on to the game, which returns
-					true if we need a new screen dump 
+		it's a keypress or event of some kind from the client. 
+		        really it's the game's responsibility.
+				we should pass on to the game, which returns
+				true if we need a new screen dump 
 	
-			for now i guess we are the game
+		for now i guess we are the game
 		"""
 		# we assume a single stevent is steve-sent
 		stevent = self.depacketize(line) 		
