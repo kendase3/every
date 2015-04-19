@@ -4,7 +4,7 @@ import struct
 
 class Stevent:
 	"""
-		like an event but more handsome
+	like an event but more handsome
 	"""
 	# event type constants
 	KEYDOWN = 0
@@ -19,7 +19,7 @@ class Stevent:
 
 	def __init__(self, eventType, key=0): 
 		"""
-			key is the number i.e. ord('a') not 'a'
+		key is the number i.e. ord('a') not 'a'
 		"""
 		self.type = eventType
 		self.key = key
@@ -41,7 +41,7 @@ class Stevent:
 
 def byte(stevent):
 	"""
-		turn a stevent into a two-byte representation
+	turn a stevent into a two-byte representation
 	"""
 	msg = bytearray()
 	msg.extend(struct.pack("BB", stevent.type, stevent.key)) 

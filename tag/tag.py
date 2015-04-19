@@ -21,12 +21,10 @@ from stevent import Stevent
 
 class Board(Game):
 	"""
-		a lil' world
+	a lil' world
 	"""
 	WIDTH = 80 
 	HEIGHT = 25 
-	#WIDTH = 30
-	#HEIGHT = 30
 	def __init__(self):
 		self.players = [] 	
 		self.haveIt = False
@@ -134,12 +132,12 @@ class Board(Game):
 
 	def getScreen(self, playerId): 
 		"""
-			so let me get this straight, steve
+		so let me get this straight, steve
 			
-			we first convert these cells into asciipixels
-			and then these asciipixels into a string
+		we first convert these cells into asciipixels
+		and then these asciipixels into a string
 
-			which begs the question, why not just direct conversion?
+		which begs the question, why not just direct conversion?
 		"""
 		#TODO: use player number to create custom screen
 		rowList = []

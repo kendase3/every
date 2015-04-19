@@ -7,10 +7,10 @@ from asciipixel import AsciiPixel
 
 class Screen:
 	"""
-		stores a screen full of ascii characters
+	stores a screen full of ascii characters
 			and their respective RGB values
 
-		i think the client should tell the server what size
+	i think the client should tell the server what size
 			screen they want (number of tiles) 
 	"""
 	# units are in ascii pixels, not pixels
@@ -56,11 +56,11 @@ class Screen:
 
 	def __str__(self):
 		"""
-			at least a little confusing that string does 
-					something completely unlike repr in
-					this case.  maybe use a different
-					naming convention?  i mean, this
-					is really just a custom pickle job
+		at least a little confusing that string does 
+				something completely unlike repr in
+				this case.  maybe use a different
+				naming convention?  i mean, this
+				is really just a custom pickle job
 		"""
 		ret = ""
 		for row in self.screen:
@@ -71,22 +71,12 @@ class Screen:
 			ret += rowStr + '\n' 
 		return ret
 
-	"""
-	def __eq__(self, other): 
-		# what does it mean for two screens to be equal?
-		for selfRow, otherRow in izip(self.screen, other.screen):
-			for selfCell, otherCell in izip(selfRow, otherRow):
-				if selfCell != otherCell:	
-					return False
-		return True
-	"""
-	
 # note: not part of class
 def destr(screenString):
 	"""
-		should return a valid screen object
-				as defined by input string
-				(think depickling)
+	should return a valid screen object
+			as defined by input string
+			(think depickling)
 	"""
 	#print "making screen from this received string: %s" % screenString
 	rowList = []
@@ -133,10 +123,7 @@ def unbyte(screenBytes):
 	height = 0
 	asciiPixels = []
 	curRow = [] 
-	#print msg[0]
-	#print "len:%d" % len(str(msg[0]))
 	height, width = struct.unpack("BB", str(msg[:2])) 
-	#print "HEY STEVE height: %d, width %d" % (height, width)
 	for i in range(0, height):
 		# height and width are counting in ASCII PIXELS not bytes
 		for j in range(0, width):

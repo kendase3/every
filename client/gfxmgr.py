@@ -1,9 +1,9 @@
 #! /usr/bin/env python
 """
-	should determine screen height/width
+should determine screen height/width
 		create a certain number of rows/cols	
 		allow user to write things
-	should provide a gap then separate space
+should provide a gap then separate space
 		for current thing being written
 """
 
@@ -234,7 +234,7 @@ class GfxMgr:
 			
 	def loadFont(self, filename, size):
 		"""
-			navigates to the fonts directory and 
+		navigates to the fonts directory and 
 				loads the font i so thoughtfully put there	
 		"""
 		try:
@@ -274,7 +274,7 @@ class GfxMgr:
 
 	def shiftify(self, key): 
 		"""
-			uses status of shift key to determine actual key sent	
+		uses status of shift key to determine actual key sent	
 		"""
 		if self.shift == False or self.keyIsEnter(key) or (
 				self.keyIsBackspace(key) or self.keyIsSpace(key)):
